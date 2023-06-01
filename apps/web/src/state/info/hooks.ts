@@ -1,3 +1,4 @@
+import { ChainId, getChain as getChainById } from '@icecreamswap/constants'
 import { Duration, getUnixTime, startOfHour, sub } from 'date-fns'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -22,7 +23,7 @@ import { ChartEntry, PoolData, PriceChartEntry, ProtocolData, TokenData } from '
 // Protocol hooks
 
 // const refreshIntervalForInfo = 15000 // 15s
-const SWR_SETTINGS = {}  // no cyclic refreshing, to reenable, add: { refreshInterval: refreshIntervalForInfo }
+const SWR_SETTINGS = {} // no cyclic refreshing, to reenable, add: { refreshInterval: refreshIntervalForInfo }
 
 export const useProtocolDataSWR = (): ProtocolData | undefined => {
   const chainName = useGetChainName()
@@ -213,7 +214,9 @@ export const useGetChainName = () => {
     if (path.includes('chainId=61916')) return 'DOKEN'
     if (path.includes('chainId=122')) return 'FUSE'
     if (path.includes('chainId=50')) return 'XDC'
-    return 'BITGERT'
+    if (path.includes('chainId=56')) return 'BSC'
+    if (path.includes('chainId=1116')) return 'CORE'
+    return 'CORE'
   }, [path])
   const [name, setName] = useState<MultiChainName | null>(getChain())
   const result = useMemo(() => name, [name])

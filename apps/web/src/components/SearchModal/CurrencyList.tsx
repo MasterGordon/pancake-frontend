@@ -1,6 +1,6 @@
 import { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { Currency, CurrencyAmount, Token } from '@pancakeswap/sdk'
-import { Text, QuestionHelper } from '@pancakeswap/uikit'
+import { Text, QuestionHelper, Tag } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
@@ -11,7 +11,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
+import { useAllTokens, useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Layout/Column'
 import { RowFixed, RowBetween } from '../Layout/Row'
 import { CurrencyLogo } from '../Logo'
@@ -26,7 +26,7 @@ function currencyKey(currency: Currency): string {
 const StyledBalanceText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
-  max-width: 5rem;
+  max-width: 8rem;
   text-overflow: ellipsis;
 `
 
@@ -45,9 +45,8 @@ function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
 const MenuItem = styled(RowBetween)<{ disabled: boolean; selected: boolean }>`
   padding: 4px 20px;
   height: 56px;
-  display: grid;
-  grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);
-  grid-gap: 8px;
+  display: flex;
+  gap: 8px;
   cursor: ${({ disabled }) => !disabled && 'pointer'};
   pointer-events: ${({ disabled }) => disabled && 'none'};
   :hover {
@@ -77,6 +76,12 @@ function CurrencyRow({
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
 
+  const defaultTokens = useAllTokens()
+  const tags = useMemo((): string[] => {
+    if (!defaultTokens || !currency) return []
+    // @ts-ignore
+    return defaultTokens[currency.address]?.tags || []
+  }, [defaultTokens, currency])
   // only show add or remove buttons if not on selected list
   return (
     <MenuItem
@@ -87,8 +92,15 @@ function CurrencyRow({
       selected={otherSelected}
     >
       <CurrencyLogo currency={currency} size="24px" />
-      <Column>
-        <Text bold>{currency.symbol}</Text>
+      <Column flexGrow={1}>
+        <Text bold display="inline-flex" style={{ gap: '4px' }}>
+          <span>{currency.symbol}</span>
+          {tags.map((tag) => (
+            <Tag variant="success" outline scale="sm">
+              {tag}
+            </Tag>
+          ))}
+        </Text>
         <Text color="textSubtle" small ellipsis maxWidth="200px">
           {!isOnSelectedList && customAdded && `${t('Added by user')} •`} {currency.name}
         </Text>

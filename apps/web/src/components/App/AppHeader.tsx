@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Text, Flex, Heading, IconButton, ArrowBackIcon, NotificationDot, QuestionHelper } from '@pancakeswap/uikit'
-import { useExpertModeManager } from 'state/user/hooks'
-import GlobalSettings from 'components/Menu/GlobalSettings'
+import { useExpertModeManager } from '../../state/user/hooks'
+import GlobalSettings from '../Menu/GlobalSettings'
 import Link from 'next/link'
 import Transactions from './Transactions'
 import { SettingsMode } from '../Menu/GlobalSettings/types'
@@ -30,7 +30,7 @@ const AppHeader: React.FC<React.PropsWithChildren<Props>> = ({ title, subtitle, 
       <Flex alignItems="center" width="100%" style={{ gap: '16px' }}>
         {backTo &&
           (typeof backTo === 'string' ? (
-            <Link passHref href={backTo}>
+            <Link passHref href={backTo} prefetch={false}>
               <IconButton as="a" scale="sm">
                 <ArrowBackIcon width="32px" />
               </IconButton>

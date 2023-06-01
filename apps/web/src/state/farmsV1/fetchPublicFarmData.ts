@@ -1,10 +1,10 @@
-import erc20 from 'config/abi/erc20.json'
+import erc20 from '../../config/abi/erc20.json'
 import chunk from 'lodash/chunk'
-import { getMasterChefV1Address } from 'utils/addressHelpers'
-import { multicallv2 } from 'utils/multicall'
+import { getMasterChefV1Address } from '../../utils/addressHelpers'
+import { multicallv2 } from '../../utils/multicall'
 import { SerializedFarm } from '@pancakeswap/farms'
 import { SerializedFarmConfig } from '../../config/constants/types'
-import {ChainId} from "@pancakeswap/sdk";
+import { ChainId } from '@pancakeswap/sdk'
 
 const fetchFarmCalls = (farm: SerializedFarm) => {
   const { lpAddress, token, quoteToken } = farm

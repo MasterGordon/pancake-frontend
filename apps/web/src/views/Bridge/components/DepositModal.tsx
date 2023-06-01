@@ -56,7 +56,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ bridge, deposit, approve })
       ? '0x0000000000000000000000000000000000000000'
       : undefined
   const handleDeposit = () => {
-    deposit(parseFloat(depositAmount), recipient, selectedToken, destinationChainConfig.domainId)
+    deposit(depositAmount, recipient, selectedToken, destinationChainConfig.domainId)
   }
 
   const handleApprove = () => {

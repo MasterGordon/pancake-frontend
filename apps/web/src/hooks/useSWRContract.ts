@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { FetchStatus } from 'config/constants/types'
+import { FetchStatus } from '../config/constants/types'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Contract } from '@ethersproject/contracts'
 import { FormatTypes } from '@ethersproject/abi'
@@ -10,9 +10,9 @@ import useSWR, {
   // eslint-disable-next-line camelcase
   unstable_serialize,
 } from 'swr'
-import { multicallv2, MulticallOptions, Call } from 'utils/multicall'
-import { MaybeContract, ContractMethodName, ContractMethodParams } from 'utils/types'
-import {ChainId} from "@pancakeswap/sdk";
+import { multicallv2, MulticallOptions, Call } from '../utils/multicall'
+import { MaybeContract, ContractMethodName, ContractMethodParams } from '../utils/types'
+import { ChainId } from '@pancakeswap/sdk'
 
 declare module 'swr' {
   interface SWRResponse<Data = any, Error = any> {
@@ -134,7 +134,12 @@ export const immutableMiddleware: Middleware = (useSWRNext) => (key, fetcher, co
   return useSWRNext(key, fetcher, config)
 }
 
-export function useSWRMulticall<Data>(abi: any[], calls: Call[], chainId: ChainId, options?: MulticallOptions & SWRConfiguration) {
+export function useSWRMulticall<Data>(
+  abi: any[],
+  calls: Call[],
+  chainId: ChainId,
+  options?: MulticallOptions & SWRConfiguration,
+) {
   const { requireSuccess = true, ...config } = options || {}
   // @ts-ignore fix chainId support
   return useSWR<Data>(calls, () => multicallv2({ abi, calls, chainId, options: { requireSuccess } }), {

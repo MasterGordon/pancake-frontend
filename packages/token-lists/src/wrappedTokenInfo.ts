@@ -17,9 +17,12 @@ export interface SerializedWrappedToken extends SerializedToken {
 export class WrappedTokenInfo extends Token {
   public readonly logoURI: string | undefined
 
+  public readonly tags: string[] | undefined
+
   constructor(tokenInfo: TokenInfo) {
     super(tokenInfo.chainId, tokenInfo.address, tokenInfo.decimals, tokenInfo.symbol, tokenInfo.name)
     this.logoURI = tokenInfo.logoURI
+    this.tags = tokenInfo.tags
   }
 
   public get serialize(): SerializedWrappedToken {

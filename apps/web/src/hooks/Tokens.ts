@@ -3,8 +3,9 @@ import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, ERC20Token, ChainId } from '@pancakeswap/sdk'
 import { TokenAddressMap } from '@pancakeswap/token-lists'
-import { GELATO_NATIVE } from 'config/constants'
+import { GELATO_NATIVE } from '../config/constants'
 import { useAtomValue } from 'jotai'
+import { loadable } from 'jotai/utils'
 import { useMemo } from 'react'
 import {
   combinedTokenMapFromActiveUrlsAtom,
@@ -30,9 +31,10 @@ const mapWithoutUrls = (tokenMap: TokenAddressMap<ChainId>, chainId: number) =>
  */
 export function useAllTokens(): { [address: string]: ERC20Token } {
   const { chainId } = useActiveChainId()
-  const tokenMap = useAtomValue(combinedTokenMapFromActiveUrlsAtom)
+  const tokenMap = useAtomValue(loadable(combinedTokenMapFromActiveUrlsAtom))
   const userAddedTokens = useUserAddedTokens()
   return useMemo(() => {
+    if (tokenMap.state !== 'hasData') return {}
     return (
       userAddedTokens
         // reduce into all ALL_TOKENS filtered by the current chain
@@ -43,7 +45,7 @@ export function useAllTokens(): { [address: string]: ERC20Token } {
           },
           // must make a copy because reduce modifies the map, and we do not
           // want to make a copy in every iteration
-          mapWithoutUrls(tokenMap, chainId),
+          mapWithoutUrls(tokenMap.data, chainId),
         )
     )
   }, [userAddedTokens, tokenMap, chainId])
@@ -54,9 +56,10 @@ export function useAllTokens(): { [address: string]: ERC20Token } {
  */
 export function useOfficialsAndUserAddedTokens(): { [address: string]: ERC20Token } {
   const { chainId } = useActiveChainId()
-  const tokenMap = useAtomValue(combinedTokenMapFromOfficialsUrlsAtom)
+  const tokenMap = useAtomValue(loadable(combinedTokenMapFromOfficialsUrlsAtom))
   const userAddedTokens = useUserAddedTokens()
   return useMemo(() => {
+    if (tokenMap.state !== 'hasData') return {}
     return (
       userAddedTokens
         // reduce into all ALL_TOKENS filtered by the current chain
@@ -67,7 +70,7 @@ export function useOfficialsAndUserAddedTokens(): { [address: string]: ERC20Toke
           },
           // must make a copy because reduce modifies the map, and we do not
           // want to make a copy in every iteration
-          mapWithoutUrls(tokenMap, chainId),
+          mapWithoutUrls(tokenMap.data, chainId),
         )
     )
   }, [userAddedTokens, tokenMap, chainId])

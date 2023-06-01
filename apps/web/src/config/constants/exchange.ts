@@ -1,11 +1,12 @@
 import { ChainId, JSBI, Percent, Token } from '@pancakeswap/sdk'
 import { BigNumber } from '@ethersproject/bignumber'
-import { bitgertTokens, dogechainTokens, dokenTokens, fuseTokens, xdcTokens } from '@pancakeswap/tokens'
+import { bitgertTokens, coreTokens, dogechainTokens, dokenTokens, fuseTokens, xdcTokens } from '@pancakeswap/tokens'
 import { ChainMap, ChainTokenList, RouterAddressTypes } from './types'
 
 export const ROUTER_ADDRESS_COMMON = '0xBb5e1777A331ED93E07cF043363e48d320eb96c4'
-export const ROUTER_ADDRESS_COMMON_AKKA_BITGERT = '0xCFD3C811766F8E60E8763739DF9a5a0104463bf3'
-export const ROUTER_ADDRESS_COMMON_AKKA_XDC = '0x9d8E6B2554672078c3d8c992b272eE3634533De7'
+export const ROUTER_ADDRESS_COMMON_AKKA_BITGERT = '0x25507a7323b04FD2687E72875aC4456C95782915'
+export const ROUTER_ADDRESS_COMMON_AKKA_XDC = '0xD16bBa1fB50aC0e7A3A5B5fD9fe99dee0d323A06'
+export const ROUTER_ADDRESS_COMMON_AKKA_CORE = '0xCDd7E3E30daC65940CB3b448CEF32d3dd5BbD107'
 
 export const ROUTER_ADDRESS: Partial<ChainMap<RouterAddressTypes>> = {
   [ChainId.BITGERT]: {
@@ -28,6 +29,10 @@ export const ROUTER_ADDRESS: Partial<ChainMap<RouterAddressTypes>> = {
   [ChainId.BSC]: {
     Icecream: ROUTER_ADDRESS_COMMON,
   },
+  [ChainId.CORE]: {
+    Icecream: ROUTER_ADDRESS_COMMON,
+    Akka: ROUTER_ADDRESS_COMMON_AKKA_CORE,
+  },
 }
 
 // used to construct intermediary pairs for trading
@@ -37,6 +42,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: Partial<ChainTokenList> = {
   [ChainId.DOKEN]: [dokenTokens.wdkn, dokenTokens.ice, dokenTokens.usdt],
   [ChainId.FUSE]: [fuseTokens.wfuse, fuseTokens.ice],
   [ChainId.XDC]: [xdcTokens.wxdc, xdcTokens.ice, xdcTokens.usdt],
+  [ChainId.CORE]: [coreTokens.wcore, coreTokens.score, coreTokens.ice, coreTokens.usdt],
 }
 
 /**
@@ -59,6 +65,7 @@ export const SUGGESTED_BASES: Partial<ChainTokenList> = {
   [ChainId.DOKEN]: [dokenTokens.ice],
   [ChainId.FUSE]: [fuseTokens.ice],
   [ChainId.XDC]: [xdcTokens.ice, xdcTokens.usdt],
+  [ChainId.CORE]: [coreTokens.ice, coreTokens.score, coreTokens.usdt],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -104,8 +111,9 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: Partial<ChainTokenList> = {
   ],
   [ChainId.DOGE]: [dogechainTokens.wdoge, dogechainTokens.ice],
   [ChainId.DOKEN]: [dokenTokens.wdkn, dokenTokens.ice, dokenTokens.usdt],
-  [ChainId.FUSE]: [fuseTokens.wfuse, fuseTokens.ice, fuseTokens.doge, fuseTokens.shiba],
+  [ChainId.FUSE]: [fuseTokens.wfuse, fuseTokens.ice],
   [ChainId.XDC]: [xdcTokens.wxdc, xdcTokens.ice, xdcTokens.usdt, xdcTokens.usdc],
+  [ChainId.CORE]: [coreTokens.wcore, coreTokens.score, coreTokens.ice, coreTokens.usdt],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
@@ -122,6 +130,11 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
   [ChainId.XDC]: [
     [xdcTokens.wxdc, xdcTokens.ice],
     [xdcTokens.usdt, xdcTokens.ice],
+  ],
+  [ChainId.CORE]: [
+    [coreTokens.score, coreTokens.ice],
+    [coreTokens.score, coreTokens.wcore],
+    [coreTokens.usdt, coreTokens.ice],
   ],
 }
 
@@ -141,7 +154,7 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.Bi
 export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
 
 // used to ensure the user doesn't send so much BNB so they end up with <.01
-export const MIN_BNB: JSBI = JSBI.exponentiate(BIG_INT_TEN, JSBI.BigInt(16)) // .01 BNB
+export const MIN_BNB: JSBI = JSBI.multiply(JSBI.exponentiate(BIG_INT_TEN, JSBI.BigInt(16)), JSBI.BigInt(6)) // .06 NativeToken
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), BIPS_BASE)
 
 export const ZERO_PERCENT = new Percent('0')
@@ -159,6 +172,6 @@ export const DEFAULT_OUTPUT_CURRENCY = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE
 export const GELATO_HANDLER = 'pancakeswap'
 export const GENERIC_GAS_LIMIT_ORDER_EXECUTION = BigNumber.from(500000)
 
-export const LIMIT_ORDERS_DOCS_URL = 'https://docs.pancakeswap.finance/products/pancakeswap-exchange/limit-orders'
+export const LIMIT_ORDERS_DOCS_URL = 'https://docs.icecreamswap.com/products/pancakeswap-exchange/limit-orders'
 
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove']

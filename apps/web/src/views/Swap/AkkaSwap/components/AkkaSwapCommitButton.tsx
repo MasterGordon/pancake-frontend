@@ -42,6 +42,8 @@ interface AkkaSwapCommitButtonPropsType {
   }
   allowedSlippage: number
   onUserInput: (field: Field, typedValue: string) => void
+  inputAmountInDollar: number
+  outputAmountInDollar: number
 }
 
 export default function AkkaSwapCommitButton({
@@ -56,6 +58,8 @@ export default function AkkaSwapCommitButton({
   currencyBalances,
   allowedSlippage,
   onUserInput,
+  inputAmountInDollar,
+  outputAmountInDollar
 }: AkkaSwapCommitButtonPropsType) {
   const { t } = useTranslation()
   // the callback to execute the swap
@@ -114,6 +118,8 @@ export default function AkkaSwapCommitButton({
       onConfirm={handleSwap}
       swapErrorMessage={swapErrorMessage}
       customOnDismiss={handleConfirmDismiss}
+      inputAmountInDollar={inputAmountInDollar}
+      outputAmountInDollar={outputAmountInDollar}
     />,
     true,
     true,

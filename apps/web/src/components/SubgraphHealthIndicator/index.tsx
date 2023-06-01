@@ -1,9 +1,9 @@
-import { BITGERT_BLOCK_TIME } from 'config'
+import { BITGERT_BLOCK_TIME } from '../../config'
 import { useTranslation, TranslateFunction } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Card, Flex, Box, InfoIcon, Text, useTooltip } from '@pancakeswap/uikit'
-import { useSubgraphHealthIndicatorManager } from 'state/user/hooks'
-import useSubgraphHealth, { SubgraphStatus } from 'hooks/useSubgraphHealth'
+import { useSubgraphHealthIndicatorManager } from '../../state/user/hooks'
+import useSubgraphHealth, { SubgraphStatus } from '../../hooks/useSubgraphHealth'
 
 const StyledCard = styled(Card)`
   border-radius: 8px;

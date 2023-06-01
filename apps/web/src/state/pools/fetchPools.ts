@@ -1,32 +1,38 @@
 import BigNumber from 'bignumber.js'
 import fromPairs from 'lodash/fromPairs'
 import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
-import poolsConfig from 'config/constants/pools'
-import sousChefABI from 'config/abi/sousChef.json'
+import poolsConfig from '../../config/constants/pools'
+import sousChefABI from '../../config/abi/sousChef.json'
 import erc20ABI from 'config/abi/erc20.json'
-import multicall, { multicallv2 } from 'utils/multicall'
-import { getAddress } from 'utils/addressHelpers'
+import multicall, { multicallv2 } from '../../utils/multicall'
+import { getAddress } from '../../utils/addressHelpers'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import chunk from 'lodash/chunk'
 import sousChefV2 from '../../config/abi/sousChefV2.json'
 import sousChefV3 from '../../config/abi/sousChefV3.json'
-import {ChainId} from "@pancakeswap/sdk";
+import { ChainId } from '@pancakeswap/sdk'
 
 const livePoolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0 && !p.isFinished)
 
 export const fetchPoolsBlockLimits = async (chainId: ChainId) => {
-  const startEndBlockRaw = await multicall(sousChefABI, livePoolsWithEnd.filter((poolConfig) => chainId in poolConfig.contractAddress).flatMap((poolConfig) => {
-    return [
-      {
-        address: getAddress(poolConfig.contractAddress, chainId),
-        name: 'startBlock',
-      },
-      {
-        address: getAddress(poolConfig.contractAddress, chainId),
-        name: 'bonusEndBlock',
-      },
-    ]
-  }), chainId)
+  const startEndBlockRaw = await multicall(
+    sousChefABI,
+    livePoolsWithEnd
+      .filter((poolConfig) => chainId in poolConfig.contractAddress)
+      .flatMap((poolConfig) => {
+        return [
+          {
+            address: getAddress(poolConfig.contractAddress, chainId),
+            name: 'startBlock',
+          },
+          {
+            address: getAddress(poolConfig.contractAddress, chainId),
+            name: 'bonusEndBlock',
+          },
+        ]
+      }),
+    chainId,
+  )
 
   const startEndBlockResult = startEndBlockRaw.reduce((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / 2)
@@ -41,28 +47,38 @@ export const fetchPoolsBlockLimits = async (chainId: ChainId) => {
     return resultArray
   }, [])
 
-  return livePoolsWithEnd.filter((poolConfig) => chainId in poolConfig.contractAddress).map((cakePoolConfig, index) => {
-    const [[startBlock], [endBlock]] = startEndBlockResult[index]
-    return {
-      sousId: cakePoolConfig.sousId,
-      startBlock: startBlock.toNumber(),
-      endBlock: endBlock.toNumber(),
-    }
-  })
+  return livePoolsWithEnd
+    .filter((poolConfig) => chainId in poolConfig.contractAddress)
+    .map((cakePoolConfig, index) => {
+      const [[startBlock], [endBlock]] = startEndBlockResult[index]
+      return {
+        sousId: cakePoolConfig.sousId,
+        startBlock: startBlock.toNumber(),
+        endBlock: endBlock.toNumber(),
+      }
+    })
 }
 
 export const fetchPoolsTotalStaking = async (chainId: ChainId) => {
-  const poolsTotalStaked = await multicall(sousChefABI, poolsConfig.filter((poolConfig) => chainId in poolConfig.contractAddress).map((poolConfig) => {
-    return {
-      address: getAddress(poolConfig.contractAddress, chainId),
-      name: 'stakedTokenAmount',
-    }
-  }), chainId)
+  const poolsTotalStaked = await multicall(
+    sousChefABI,
+    poolsConfig
+      .filter((poolConfig) => chainId in poolConfig.contractAddress)
+      .map((poolConfig) => {
+        return {
+          address: getAddress(poolConfig.contractAddress, chainId),
+          name: 'stakedTokenAmount',
+        }
+      }),
+    chainId,
+  )
 
-  return poolsConfig.filter((poolConfig) => chainId in poolConfig.contractAddress).map((p, index) => ({
-    sousId: p.sousId,
-    totalStaked: new BigNumber(poolsTotalStaked[index]).toJSON(),
-  }))
+  return poolsConfig
+    .filter((poolConfig) => chainId in poolConfig.contractAddress)
+    .map((p, index) => ({
+      sousId: p.sousId,
+      totalStaked: new BigNumber(poolsTotalStaked[index]).toJSON(),
+    }))
 }
 
 export const fetchPoolsStakingLimits = async (
@@ -106,13 +122,16 @@ export const fetchPoolsStakingLimits = async (
 
 const livePoolsWithV3 = poolsConfig.filter((pool) => pool?.version === 3 && pool?.isFinished === false)
 
-export const fetchPoolsProfileRequirement = async (chainId: ChainId): Promise<{
+export const fetchPoolsProfileRequirement = async (
+  chainId: ChainId,
+): Promise<{
   [key: string]: {
     required: boolean
     thresholdPoints: string
   }
 }> => {
-  const poolProfileRequireCalls = livePoolsWithV3.filter((poolConfig) => chainId in poolConfig.contractAddress)
+  const poolProfileRequireCalls = livePoolsWithV3
+    .filter((poolConfig) => chainId in poolConfig.contractAddress)
     .map((validPool) => {
       const contractAddress = getAddress(validPool.contractAddress, chainId)
       return ['pancakeProfileIsRequested', 'pancakeProfileThresholdPoints'].map((method) => ({

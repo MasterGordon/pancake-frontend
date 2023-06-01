@@ -63,7 +63,7 @@ export default function useWarningImport() {
   }, [])
 
   useEffect(() => {
-    if (importTokensNotInDefault.length > 0) {
+    if (importTokensNotInDefault.length > 0 && Object.keys(defaultTokens).length > 0) {
       onPresentImportTokenWarningModal()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

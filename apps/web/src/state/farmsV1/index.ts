@@ -9,8 +9,8 @@ import type {
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import stringify from 'fast-json-stable-stringify'
 import { getFarmConfig } from '@pancakeswap/farms/constants'
-import type { AppState } from 'state'
-import { getFarmsPriceHelperLpFiles } from 'config/constants/priceHelperLps/index'
+import type { AppState } from '..'
+import { getFarmsPriceHelperLpFiles } from '../../config/constants/priceHelperLps/index'
 import fetchFarms from './fetchFarms'
 import getFarmsPrices from './getFarmsPrices'
 import {
@@ -31,13 +31,13 @@ const initialState: SerializedFarmsState = {
 // Async thunks
 export const fetchFarmsPublicDataAsync = createAsyncThunk<
   [SerializedFarm[], number],
-    {pids: number[], chainId: number},
+  { pids: number[]; chainId: number },
   {
     state: AppState
   }
 >(
   'farmsV1/fetchFarmsPublicDataAsync',
-  async ({pids, chainId}) => {
+  async ({ pids, chainId }) => {
     const farmsConfig = await getFarmConfig(chainId)
     const poolLength = await fetchMasterChefFarmPoolLength()
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.v1pid))
@@ -79,13 +79,13 @@ interface FarmUserDataResponse {
 
 export const fetchFarmUserDataAsync = createAsyncThunk<
   FarmUserDataResponse[],
-  { account: string; pids: number[], chainId: number },
+  { account: string; pids: number[]; chainId: number },
   {
     state: AppState
   }
 >(
   'farmsV1/fetchFarmUserDataAsync',
-  async ({ account, pids , chainId}) => {
+  async ({ account, pids, chainId }) => {
     const farmsConfig = await getFarmConfig(chainId)
     const poolLength = await fetchMasterChefFarmPoolLength()
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.v1pid))

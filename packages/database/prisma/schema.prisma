@@ -1,0 +1,108 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Listed {
+  NOT_LISTED
+  DEFAULT_LIST
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  symbol    String
+  decimals  Int
+  address   String
+  chainId   Int
+  listed    Listed   @default(NOT_LISTED)
+  addedBy   User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model Campaign {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  address         String
+  chainId         Int
+  website         String
+  banner          String?
+  twitter         String?
+  telegram        String?
+  discord         String?
+  github          String?
+  reddit          String?
+  description     String
+  tags            String[]
+  deleted         Boolean  @default(false)
+  startDate       Int?
+  dummyRate       String?
+  dummyMaxContrib String?
+  dummyHardCap    String?
+  dummySoftCap    String?
+}
+
+model Kyc {
+  id              Int          @id @default(autoincrement())
+  createdAt       DateTime     @default(now())
+  address         String       @unique
+  chainId         Int
+  transactionHash String
+  status          String
+  Delegation      Delegation[]
+  tokenId         Int?
+}
+
+enum DelegationStatus {
+  PENDING
+  APPROVED
+  MINTED
+  REJECTED
+}
+
+model Delegation {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  source    Kyc      @relation(fields: [kycId], references: [id])
+  target    String
+  chainId   Int
+  status    DelegationStatus @default(PENDING)
+  tokenId   Int?
+  kycId     Int
+}
+
+model Flags {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  key       String
+  value     String
+}
+
+enum Role {
+  ADMIN
+  MOD
+  KYC
+  USER
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  wallet    String   @unique
+  role      Role     @default(USER)
+  name      String
+  Token     Token[]
+}
+
+model Airdrop {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  campaign  String
+  address   String
+  ip        String
+}

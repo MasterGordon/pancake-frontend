@@ -1,4 +1,3 @@
-import { BridgeFactory, ERC20HandlerPercentageFeeFactory } from '@chainsafe/chainbridge-contracts'
 import { getProvider } from '@wagmi/core'
 import { BridgeChain, TokenConfig } from '../config'
 import { Erc20DetailedFactory } from './Erc20DetailedFactory'
@@ -7,6 +6,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 
 export const hasTokenSupplies = async (destinationChain: BridgeChain, token: TokenConfig, amount: number) => {
+  const { BridgeFactory, ERC20HandlerPercentageFeeFactory } = await import('@chainsafe/chainbridge-contracts')
   const destinationToken = destinationChain?.tokens.find(
     (_token: TokenConfig) => _token.resourceId === token.resourceId,
   )
@@ -27,10 +27,10 @@ export const hasTokenSupplies = async (destinationChain: BridgeChain, token: Tok
       return true
     }
     let balanceTokens
-    let erc20Decimals
+    let erc20Decimals: number | undefined
     if (!destinationNativeCoin) {
       balanceTokens = await erc20destinationToken.balanceOf(destinationErc20Handler)
-      erc20Decimals = destinationChain.decimals ?? (await erc20destinationToken.decimals())
+      erc20Decimals = await erc20destinationToken.decimals()
     } else {
       balanceTokens = await erc20destinationToken.provider.getBalance(destinationErc20Handler)
       erc20Decimals = 18

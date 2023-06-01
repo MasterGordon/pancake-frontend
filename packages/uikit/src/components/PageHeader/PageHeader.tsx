@@ -13,9 +13,10 @@ const Inner = styled(Container)`
   position: relative;
 `;
 
-const PageHeader: React.FC<React.PropsWithChildren<PageHeaderProps>> = ({ background, children, ...props }) => (
+const PageHeader: React.FC<React.PropsWithChildren<PageHeaderProps>> = ({ background, children, extra, ...props }) => (
   <Outer background={background} {...props}>
     <Inner>{children}</Inner>
+    {extra}
   </Outer>
 );
 

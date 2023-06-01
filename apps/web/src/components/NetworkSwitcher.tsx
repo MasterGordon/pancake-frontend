@@ -15,19 +15,19 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useActiveChainId, useLocalNetworkChain } from 'hooks/useActiveChainId'
-import { useNetworkConnectorUpdater } from 'hooks/useActiveWeb3React'
-import { useHover } from 'hooks/useHover'
-import { useSessionChainId } from 'hooks/useSessionChainId'
-import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useActiveChainId, useLocalNetworkChain } from '../hooks/useActiveChainId'
+import { useNetworkConnectorUpdater } from '../hooks/useActiveWeb3React'
+import { useHover } from '../hooks/useHover'
+import { useSessionChainId } from '../hooks/useSessionChainId'
+import { useSwitchNetwork } from '../hooks/useSwitchNetwork'
 import { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { chains } from 'utils/wagmi'
+import { chains } from '../utils/wagmi'
 import { useNetwork } from 'wagmi'
 
 import { ChainLogo } from './Logo/ChainLogo'
 import chainName from '../config/constants/chainName'
-import { useSupportedChains } from 'hooks/useSupportedChains'
+import { useSupportedChains } from '../hooks/useSupportedChains'
 
 const NetworkSelect = ({ switchNetwork, chainId }) => {
   const { t } = useTranslation()
@@ -74,7 +74,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId }) => {
     },
   )
   const { chain } = useNetwork()
-  const localChainId = useLocalNetworkChain() || ChainId.BITGERT
+  const localChainId = useLocalNetworkChain() || ChainId.CORE
   const [, setSessionChainId] = useSessionChainId()
 
   const localChainName = chains.find((c) => c.id === localChainId)?.name ?? 'BSC'

@@ -13,6 +13,7 @@ import { useHasPendingApproval, useTransactionAdder } from '../state/transaction
 import { calculateGasMargin } from '../utils'
 import { computeSlippageAdjustedAmounts } from '../utils/exchange'
 import useGelatoLimitOrdersLib from './limitOrders/useGelatoLimitOrdersLib'
+import { useActiveChainId } from './useActiveChainId'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useTokenContract } from './useContract'
 import useTokenAllowance from './useTokenAllowance'
@@ -23,11 +24,11 @@ export enum ApprovalState {
   PENDING,
   APPROVED,
 }
-
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export function useApproveCallback(
   amountToApprove?: CurrencyAmount<Currency>,
   spender?: string,
+  exactApproval = false,
 ): [ApprovalState, () => Promise<void>] {
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -54,7 +55,7 @@ export function useApproveCallback(
 
   const tokenContract = useTokenContract(token?.address)
   const addTransaction = useTransactionAdder()
-
+  const { chainId } = useActiveChainId()
   const approve = useCallback(async (): Promise<void> => {
     if (approvalState !== ApprovalState.NOT_APPROVED) {
       toastError(t('Error'), t('Approve was called unnecessarily'))
@@ -85,7 +86,7 @@ export function useApproveCallback(
       return undefined
     }
 
-    let useExact = false
+    let useExact = exactApproval
 
     const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
       // general fallback for tokens who restrict approval amounts

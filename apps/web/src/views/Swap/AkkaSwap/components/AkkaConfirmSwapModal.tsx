@@ -39,7 +39,7 @@ const SwapTransactionErrorContent = ({ onDismiss, message, openSettingModal }) =
             </Text>
           </Text>
           <LinkExternal
-            href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/trade-guide"
+            href="https://docs.icecreamswap.com/products/pancakeswap-exchange/trade-guide"
             style={{ width: '100%', justifyContent: 'center' }}
           >
             {t('What are the potential issues with the token?')}
@@ -66,6 +66,8 @@ interface ConfirmSwapModalProps {
   customOnDismiss?: () => void
   openSettingModal?: () => void
   isStable?: boolean
+  inputAmountInDollar: number
+  outputAmountInDollar: number
 }
 
 const AkkaConfirmSwapModal: React.FC<React.PropsWithChildren<InjectedModalProps & ConfirmSwapModalProps>> = ({
@@ -83,6 +85,8 @@ const AkkaConfirmSwapModal: React.FC<React.PropsWithChildren<InjectedModalProps 
   txHash,
   openSettingModal,
   isStable,
+  inputAmountInDollar,
+  outputAmountInDollar
 }) => {
   const {
     independentField,
@@ -119,6 +123,8 @@ const AkkaConfirmSwapModal: React.FC<React.PropsWithChildren<InjectedModalProps 
           allowedSlippage={allowedSlippage}
           onConfirm={onConfirm}
           recipient={recipient}
+          inputAmountInDollar={inputAmountInDollar}
+          outputAmountInDollar={outputAmountInDollar}
         />
       ),
     [

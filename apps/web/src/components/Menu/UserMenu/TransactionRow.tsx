@@ -1,11 +1,11 @@
 import { BlockIcon, CheckmarkCircleIcon, Flex, OpenNewIcon, RefreshIcon } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { useAppDispatch } from 'state'
+import { useAppDispatch } from '../../../state'
 import { useTranslation } from '@pancakeswap/localization'
 import { TransactionDetails } from 'state/transactions/reducer'
-import { pickFarmTransactionTx } from 'state/global/actions'
-import { TransactionType, FarmTransactionStatus } from 'state/transactions/actions'
-import { getBlockExploreLink } from 'utils'
+import { pickFarmTransactionTx } from '../../../state/global/actions'
+import { TransactionType, FarmTransactionStatus } from '../../../state/transactions/actions'
+import { getBlockExploreLink } from '../../../utils'
 
 interface TransactionRowProps {
   txn: TransactionDetails

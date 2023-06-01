@@ -1,5 +1,4 @@
 import type { Bridge } from '@chainsafe/chainbridge-contracts'
-import { BridgeFactory } from '@chainsafe/chainbridge-contracts'
 import type { BridgeChain } from './config'
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react'
 import { useBalance, useProvider, useSigner } from 'wagmi'
@@ -67,7 +66,7 @@ export const BridgeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { chainId: routerChainId } = useRouter().query
   const chainId = accountChainId ?? (typeof routerChainId === 'string' ? parseInt(routerChainId) : undefined)
   const [currency, setCurrency] = useState<Currency | undefined>()
-  const [depositAmount, setDepositAmount] = useState('0')
+  const [depositAmount, setDepositAmount] = useState('')
   const [destinationChainId, setDestinationChainId] = useState<number | undefined>()
   useEffect(() => {
     setDestinationChainId(bridgeChains.find((chain) => chain.networkId !== chainId)?.networkId)
@@ -80,9 +79,13 @@ export const BridgeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const signer = useSigner()
   const [bridge, setBridge] = useState<Bridge | undefined>()
   useEffect(() => {
-    if (signer?.data && homeChainConfig?.bridgeAddress) {
-      setBridge(BridgeFactory.connect(homeChainConfig.bridgeAddress, signer.data))
+    const createBridge = async () => {
+      if (signer?.data && homeChainConfig?.bridgeAddress) {
+        const { BridgeFactory } = await import('@chainsafe/chainbridge-contracts')
+        setBridge(BridgeFactory.connect(homeChainConfig.bridgeAddress, signer.data))
+      }
     }
+    createBridge()
   }, [signer?.data, homeChainConfig?.bridgeAddress])
   const [recipient, setRecipient] = useState<string>()
   const [toOtherAddress, setToOtherAddress] = useState(false)
@@ -119,7 +122,7 @@ export const BridgeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (homeChainConfig && destinationChainConfig) {
       setCurrency(undefined)
-      setDepositAmount('0')
+      setDepositAmount('')
     }
   }, [homeChainConfig, destinationChainConfig])
   const destProvider = useProvider({ chainId: destinationChainId })
@@ -127,17 +130,22 @@ export const BridgeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (!destinationChainConfig) return () => undefined
 
-    const destinationBridge = BridgeFactory.connect(destinationChainConfig.bridgeAddress, destProvider)
-    destinationBridge?.on(
-      destinationBridge.filters.ProposalEvent(null, null, null, null) as any,
-      async (originDomainId: number, nonce: BigNumber, status: number) => {
-        console.log('ProposalEvent', originDomainId, nonce?.toString(), status)
-        if (originDomainId !== homeChainConfig?.domainId) return
-        if (nonce.toString() !== depositNonce) return
-        if (status === 3) setTransactionStatus('Transfer Completed')
-        if (status === 4) setTransactionStatus('Transfer Aborted')
-      },
-    )
+    let destinationBridge: Bridge | undefined
+    const sub = async () => {
+      const { BridgeFactory } = await import('@chainsafe/chainbridge-contracts')
+      destinationBridge = BridgeFactory.connect(destinationChainConfig.bridgeAddress, destProvider)
+      destinationBridge?.on(
+        destinationBridge.filters.ProposalEvent(null, null, null, null) as any,
+        async (originDomainId: number, nonce: BigNumber, status: number) => {
+          console.log('ProposalEvent', originDomainId, nonce?.toString(), status)
+          if (originDomainId !== homeChainConfig?.domainId) return
+          if (nonce.toString() !== depositNonce) return
+          if (status === 3) setTransactionStatus('Transfer Completed')
+          if (status === 4) setTransactionStatus('Transfer Aborted')
+        },
+      )
+    }
+    sub()
     return () => {
       destinationBridge?.removeAllListeners(destinationBridge.filters.ProposalEvent(null, null, null, null) as any)
     }

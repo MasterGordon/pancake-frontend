@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
 import replaceBrowserHistory from '@pancakeswap/utils/replaceBrowserHistory'
-import { ConnectorNames } from 'config/wallet'
+import { ConnectorNames } from '../config/wallet'
 import { useCallback } from 'react'
-import { useAppDispatch } from 'state'
+import { useAppDispatch } from '../state'
 import {
   ConnectorNotFoundError,
   SwitchChainError,

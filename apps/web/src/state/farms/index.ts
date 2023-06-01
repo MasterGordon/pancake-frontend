@@ -8,18 +8,18 @@ import type {
   UnknownAsyncThunkRejectedAction,
 } from '@reduxjs/toolkit/dist/matchers'
 import BigNumber from 'bignumber.js'
-import masterchefABI from 'config/abi/masterchef.json'
-import { FARM_API } from 'config/constants/endpoints'
-import { getFarmsPriceHelperLpFiles } from 'config/constants/priceHelperLps'
+import masterchefABI from '../../config/abi/masterchef.json'
+import { FARM_API } from '../../config/constants/endpoints'
+import { getFarmsPriceHelperLpFiles } from '../../config/constants/priceHelperLps'
 import stringify from 'fast-json-stable-stringify'
 import fromPairs from 'lodash/fromPairs'
-import type { AppState } from 'state'
-import { getMasterChefAddress } from 'utils/addressHelpers'
+import type { AppState } from '..'
+import { getMasterChefAddress } from '../../utils/addressHelpers'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
-import multicall, { multicallv2 } from 'utils/multicall'
-import { chains } from 'utils/wagmi'
-import splitProxyFarms from 'views/Farms/components/YieldBooster/helpers/splitProxyFarms'
-import { verifyBscNetwork } from 'utils/verifyBscNetwork'
+import multicall, { multicallv2 } from '../../utils/multicall'
+import { chains } from '../../utils/wagmi'
+import splitProxyFarms from '../../views/Farms/components/YieldBooster/helpers/splitProxyFarms'
+import { verifyBscNetwork } from '../../utils/verifyBscNetwork'
 import { resetUserState } from '../global/actions'
 import fetchFarms from './fetchFarms'
 import {
@@ -37,14 +37,16 @@ import getFarmsPrices from './getFarmsPrices'
 const fetchFetchPublicDataOld = async ({ pids, chainId }): Promise<[SerializedFarm[], number, number]> => {
   const [poolLength, [icePerBlockRaw]] = await Promise.all([
     fetchMasterChefFarmPoolLength(chainId),
-    multicall(masterchefABI, [
-      {
-        address: getMasterChefAddress(chainId),
-        name: 'icePerBlock',
-        params: [true],
-      },
-    ],
-    chainId
+    multicall(
+      masterchefABI,
+      [
+        {
+          address: getMasterChefAddress(chainId),
+          name: 'icePerBlock',
+          params: [true],
+        },
+      ],
+      chainId,
     ),
   ])
 

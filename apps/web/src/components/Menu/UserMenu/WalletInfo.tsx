@@ -10,15 +10,15 @@ import {
   CopyAddress,
 } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
-import { FetchStatus } from 'config/constants/types'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { FetchStatus } from '../../../config/constants/types'
+import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
-import useAuth from 'hooks/useAuth'
-import useNativeCurrency from 'hooks/useNativeCurrency'
-import { useGetCakeBalance } from 'hooks/useTokenBalance'
-import { ChainLogo } from 'components/Logo/ChainLogo'
+import useAuth from '../../../hooks/useAuth'
+import useNativeCurrency from '../../../hooks/useNativeCurrency'
+import { useGetCakeBalance } from '../../../hooks/useTokenBalance'
+import { ChainLogo } from '../../Logo/ChainLogo'
 
-import { getBlockExploreLink, getBlockExploreName } from 'utils'
+import { getBlockExploreLink, getBlockExploreName } from '../../../utils'
 import { formatBigNumber } from '@pancakeswap/utils/formatBalance'
 import { useBalance } from 'wagmi'
 
@@ -69,8 +69,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
           </Box>
         </Message>
       )}
-      {
-      chain && (
+      {chain && (
         <Box mb="12px">
           <Flex justifyContent="space-between" alignItems="center" mb="8px">
             <Flex bg={COLORS.ETH} borderRadius="16px" pl="4px" pr="8px" py="2px">
@@ -94,8 +93,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             )}
           </Flex>
         </Box>
-      )
-      }
+      )}
       <Box mb="24px">
         <Flex alignItems="center" justifyContent="space-between">
           <Text color="textSubtle">{t('ICE Balance')}</Text>

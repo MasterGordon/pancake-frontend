@@ -1,12 +1,16 @@
 import BigNumber from 'bignumber.js'
-import erc20ABI from 'config/abi/erc20.json'
-import masterchefABIV1 from 'config/abi/masterchefV1.json'
-import multicall from 'utils/multicall'
-import { getMasterChefV1Address } from 'utils/addressHelpers'
-import { SerializedFarmConfig } from 'config/constants/types'
-import {ChainId} from "@pancakeswap/sdk";
+import erc20ABI from '../../config/abi/erc20.json'
+import masterchefABIV1 from '../../config/abi/masterchefV1.json'
+import multicall from '../../utils/multicall'
+import { getMasterChefV1Address } from '../../utils/addressHelpers'
+import { SerializedFarmConfig } from '../../config/constants/types'
+import { ChainId } from '@pancakeswap/sdk'
 
-export const fetchFarmUserAllowances = async (account: string, farmsToFetch: SerializedFarmConfig[], chainId: ChainId) => {
+export const fetchFarmUserAllowances = async (
+  account: string,
+  farmsToFetch: SerializedFarmConfig[],
+  chainId: ChainId,
+) => {
   const masterChefAddress = getMasterChefV1Address()
 
   const calls = farmsToFetch.map((farm) => {
@@ -21,7 +25,11 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Ser
   return parsedLpAllowances
 }
 
-export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: SerializedFarmConfig[], chainId: ChainId) => {
+export const fetchFarmUserTokenBalances = async (
+  account: string,
+  farmsToFetch: SerializedFarmConfig[],
+  chainId: ChainId,
+) => {
   const calls = farmsToFetch.map((farm) => {
     const lpContractAddress = farm.lpAddress
     return {
@@ -56,7 +64,11 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   return parsedStakedBalances
 }
 
-export const fetchFarmUserEarnings = async (account: string, farmsToFetch: SerializedFarmConfig[], chainId: ChainId) => {
+export const fetchFarmUserEarnings = async (
+  account: string,
+  farmsToFetch: SerializedFarmConfig[],
+  chainId: ChainId,
+) => {
   const masterChefAddress = getMasterChefV1Address()
 
   const calls = farmsToFetch.map((farm) => {

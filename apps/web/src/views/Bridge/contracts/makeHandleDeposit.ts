@@ -1,4 +1,4 @@
-import { Bridge } from '@chainsafe/chainbridge-contracts'
+import type { Bridge } from '@chainsafe/chainbridge-contracts'
 import { providers, BigNumber, utils, constants as ethersConstants } from 'ethers'
 import type { TransactionStatus } from '../BridgeProvider'
 import { BridgeChain } from '../config'
@@ -64,7 +64,7 @@ const makeHandleDeposit = (
     }
   }
 
-  const deposit = async (amount: number, recipient: string, tokenAddress: string, destinationDomainId: number) => {
+  const deposit = async (amount: string, recipient: string, tokenAddress: string, destinationDomainId: number) => {
     if (!homeChainConfig || !homeBridge) {
       console.error('Home bridge contract is not instantiated')
       return
@@ -88,7 +88,7 @@ const makeHandleDeposit = (
 
     const erc20Decimals = isNative ? 18 : await erc20.decimals()
 
-    const amountBN = BigNumber.from(utils.parseUnits(amount.toString(), erc20Decimals))
+    const amountBN = BigNumber.from(utils.parseUnits(amount, erc20Decimals))
 
     const data = `0x${utils.hexZeroPad(amountBN.toHexString(), 32).substring(2) /* Deposit Amount (32 bytes) */}${
       utils
@@ -105,7 +105,7 @@ const makeHandleDeposit = (
       const currentAllowance = isNative ? 0 : await erc20.allowance(address, handlerAddress)
       console.log('🚀  currentAllowance', utils.formatUnits(currentAllowance, erc20Decimals))
       // TODO extract token allowance logic to separate function
-      if (!isNative && Number(utils.formatUnits(currentAllowance, erc20Decimals)) < amount) {
+      if (!isNative && Number(utils.formatUnits(currentAllowance, erc20Decimals)) < parseFloat(amount)) {
         if (Number(utils.formatUnits(currentAllowance, erc20Decimals)) > 0) {
           // We need to reset the user's allowance to 0 before we give them a new allowance
           setTransactionStatus('Approve 0')

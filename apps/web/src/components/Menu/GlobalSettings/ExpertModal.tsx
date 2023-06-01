@@ -9,7 +9,7 @@ import {
   Checkbox,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import { useExpertModeManager } from 'state/user/hooks'
+import { useExpertModeManager } from '../../../state/user/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 interface ExpertModalProps extends InjectedModalProps {

@@ -5,12 +5,12 @@ import {
   DeserializedCakeVault,
   SerializedLockedCakeVault,
   VaultKey,
-} from 'state/types'
+} from '../types'
 import { SerializedFarm } from '@pancakeswap/farms'
 import { deserializeToken } from '@pancakeswap/token-lists'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { isAddress } from 'utils'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { isAddress } from '../../utils'
+import { convertSharesToCake } from '../../views/Pools/helpers'
 import { Token } from '@pancakeswap/sdk'
 import { Pool } from '@pancakeswap/uikit'
 

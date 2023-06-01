@@ -1,17 +1,17 @@
 import { Button, Modal, Text, Grid, Box, Message, MessageText } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
-import Image from 'next/future/image'
-import { useSwitchNetwork, useSwitchNetworkLocal } from 'hooks/useSwitchNetwork'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { chains } from 'utils/wagmi'
+import Image from 'next/image'
+import { useSwitchNetwork, useSwitchNetworkLocal } from '../../hooks/useSwitchNetwork'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
+import { chains } from '../../utils/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'
-import { useHistory } from 'contexts/HistoryContext'
+import { useHistory } from '../../contexts/HistoryContext'
 import NextLink from 'next/link'
-import { useMenuItems } from 'components/Menu/hooks/useMenuItems'
-import { getActiveMenuItem, getActiveSubMenuItem } from 'components/Menu/utils'
+import { useMenuItems } from '../Menu/hooks/useMenuItems'
+import { getActiveMenuItem, getActiveSubMenuItem } from '../Menu/utils'
 import { useRouter } from 'next/router'
-import useAuth from 'hooks/useAuth'
+import useAuth from '../../hooks/useAuth'
 
 export function PageNetworkSupportModal() {
   const { t } = useTranslation()
@@ -48,11 +48,7 @@ export function PageNetworkSupportModal() {
             <Image src={image} alt="feature" fill style={{ objectFit: 'contain' }} unoptimized />
           </Box>
         )}
-        <Text small>
-          {t(
-            'The chain you are on is not supporting this feature. Please switch your network.',
-          )}
-        </Text>
+        <Text small>{t('The chain you are on is not supporting this feature. Please switch your network.')}</Text>
         {canSwitch ? (
           <Button
             variant={foundChain && lastValidPath ? 'secondary' : 'primary'}
@@ -79,7 +75,7 @@ export function PageNetworkSupportModal() {
           </Button>
         )}
         {foundChain && lastValidPath && (
-          <NextLink href={lastValidPath} passHref>
+          <NextLink href={lastValidPath} passHref prefetch={false}>
             <Button as="a">{t('Stay on %chain%', { chain: foundChain.name })}</Button>
           </NextLink>
         )}

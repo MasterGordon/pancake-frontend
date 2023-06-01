@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/sdk'
 import { Pool } from '@pancakeswap/uikit'
-import addresses from 'config/constants/contracts'
-import { VaultKey } from 'state/types'
+import addresses from '../config/constants/contracts'
+import { VaultKey } from '../state/types'
 
 export const getAddress = (address: Pool.Address, chainId: ChainId): string => {
   return address[chainId]

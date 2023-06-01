@@ -3,7 +3,7 @@ import { Token } from '@pancakeswap/sdk'
 import { createSelector } from '@reduxjs/toolkit'
 import { deserializeToken } from '@pancakeswap/token-lists'
 import { useSelector } from 'react-redux'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useActiveChainId } from '../../../hooks/useActiveChainId'
 import { AppState } from '../../index'
 
 const selectUserTokens = ({ user: { tokens } }: AppState) => tokens

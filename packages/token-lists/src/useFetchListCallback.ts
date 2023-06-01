@@ -5,7 +5,6 @@ import { fetchTokenList } from './actions'
 
 function useFetchListCallback(
   dispatch,
-  isAptos = false,
 ): (listUrl: string, sendDispatch?: boolean) => Promise<TokenList> {
   // note: prevent dispatch if using for list search or unsupported list
   return useCallback(
@@ -16,7 +15,7 @@ function useFetchListCallback(
       }
       // lazy load avj and token list schema
       const getTokenList = (await import('./getTokenList')).default
-      return getTokenList(listUrl, isAptos)
+      return getTokenList(listUrl)
         .then((tokenList) => {
           if (sendDispatch) {
             dispatch(fetchTokenList.fulfilled({ url: listUrl, tokenList, requestId }))

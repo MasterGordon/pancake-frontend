@@ -1,7 +1,7 @@
 import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
 import { WeiPerEther } from '@ethersproject/constants'
 import _toString from 'lodash/toString'
-import { BLOCKS_PER_YEAR } from 'config'
+import { blocksPerYear } from 'config'
 import masterChefAbi from 'config/abi/masterchef.json'
 import { useCallback, useMemo } from 'react'
 import { useCakeVault } from 'state/pools/hooks'
@@ -82,7 +82,7 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
       FixedNumber.from(totalSpecialAllocPoint),
     )
     return FixedNumber.from(specialFarmsPerBlock)
-      .mulUnsafe(FixedNumber.from(BLOCKS_PER_YEAR))
+      .mulUnsafe(FixedNumber.from(blocksPerYear(chainId)))
       .mulUnsafe(cakePoolSharesInSpecialFarms)
   })
 

@@ -2,10 +2,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { ChainId } from '@pancakeswap/sdk'
 import { useModal, useToast } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { ToastDescriptionWithTx } from 'components/Toast'
-import { useAnniversaryAchievementContract } from 'hooks/useContract'
-import useCatchTxError from 'hooks/useCatchTxError'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ToastDescriptionWithTx } from '../Toast'
+import { useAnniversaryAchievementContract } from '../../hooks/useContract'
+import useCatchTxError from '../../hooks/useCatchTxError'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import AnniversaryAchievementModal from './AnniversaryAchievementModal'
@@ -19,7 +19,8 @@ const enable = false
 
 const GlobalCheckClaimStatus: React.FC<React.PropsWithChildren<GlobalCheckClaimStatusProps>> = (props) => {
   const { account, chainId } = useActiveWeb3React()
-  if (!enable || true) {  // || chainId !== ChainId.BSC
+  if (!enable || true) {
+    // || chainId !== ChainId.BSC
     return null
   }
   return <GlobalCheckClaim key={account} {...props} />

@@ -10,6 +10,7 @@ import keyBy from 'lodash/keyBy'
 import groupBy from 'lodash/groupBy'
 import mapValues from 'lodash/mapValues'
 import { useAtomValue } from 'jotai'
+import { loadable } from 'jotai/utils'
 
 interface AccessRiskProps {
   inputCurrency: Currency
@@ -19,7 +20,7 @@ interface AccessRiskProps {
 const AccessRisk: React.FC<AccessRiskProps> = ({ inputCurrency, outputCurrency }) => {
   const { t } = useTranslation()
   const { toastInfo } = useToast()
-  const tokenMap = useAtomValue(tokenListFromOfficialsUrlsAtom)
+  const tokenMap = useAtomValue(loadable(tokenListFromOfficialsUrlsAtom))
 
   const { address: inputAddress, chainId: inputChainId } = useMemo(() => (inputCurrency as any) ?? {}, [inputCurrency])
   const { address: outputAddress, chainId: outputChainId } = useMemo(
@@ -36,11 +37,12 @@ const AccessRisk: React.FC<AccessRiskProps> = ({ inputCurrency, outputCurrency }
   })
   const tokensForScan = useMemo(() => {
     const tokensToScan = []
+    if (tokenMap.state !== 'hasData') return tokensToScan
     if (
       inputCurrency &&
       !inputCurrency.isNative &&
       !results[inputChainId]?.[inputAddress] &&
-      !tokenMap?.[inputChainId]?.[inputAddress]
+      !tokenMap.data?.[inputChainId]?.[inputAddress]
     ) {
       tokensToScan.push(inputCurrency)
     }

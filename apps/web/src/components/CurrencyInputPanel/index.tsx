@@ -1,5 +1,5 @@
 import { ChainId, Currency, ERC20Token, Pair } from '@pancakeswap/sdk'
-import { Button, ChevronDownIcon, Text, useModal, Flex, Box, NumericalInput, CopyButton } from '@pancakeswap/uikit'
+import { Button, ChevronDownIcon, Text, useModal, Flex, Box, NumericalInput, CopyButton, Tag } from '@pancakeswap/uikit'
 import styled, { css } from 'styled-components'
 import { isAddress } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
@@ -16,6 +16,8 @@ import { CurrencyLogo, DoubleCurrencyLogo } from '../Logo'
 
 import AddToWalletButton from '../AddToWallet/AddToWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useAllTokens } from 'hooks/Tokens'
+import { useMemo } from 'react'
 
 const InputRow = styled.div<{ selected: boolean }>`
   display: flex;
@@ -24,7 +26,7 @@ const InputRow = styled.div<{ selected: boolean }>`
   justify-content: flex-end;
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
 `
-const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })<{ zapStyle?: ZapStyle }>`
+export const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })<{ zapStyle?: ZapStyle }>`
   padding: 0 0.5rem;
   ${({ zapStyle, theme }) =>
     zapStyle &&
@@ -121,7 +123,7 @@ export default function CurrencyInputPanel({
   commonBasesType,
   disabled,
   error,
-  showBUSD,
+  showBUSD = true,
   tokens,
   hideManage,
   showNative,
@@ -151,6 +153,13 @@ export default function CurrencyInputPanel({
       showNative={showNative}
     />,
   )
+
+  const defaultTokens = useAllTokens()
+  const tags = useMemo((): string[] => {
+    if (!defaultTokens || !token) return []
+    // @ts-ignore
+    return defaultTokens[token.address]?.tags || []
+  }, [defaultTokens, token])
 
   return (
     <Box position="relative" id={id}>
@@ -192,6 +201,11 @@ export default function CurrencyInputPanel({
           </CurrencySelectButton>
           {token && tokenAddress ? (
             <Flex style={{ gap: '4px' }} ml="4px" alignItems="center">
+              {tags.map((tag) => (
+                <Tag variant="success" outline scale="sm">
+                  {tag}
+                </Tag>
+              ))}
               <CopyButton
                 width="16px"
                 buttonColor="textSubtle"

@@ -1,8 +1,8 @@
 import { Link, Text } from '@pancakeswap/uikit'
-import { getBlockExploreLink, getBlockExploreName } from 'utils'
+import { getBlockExploreLink, getBlockExploreName } from '../../utils'
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useActiveChainId } from '../../hooks/useActiveChainId'
 
 interface DescriptionWithTxProps {
   description?: string

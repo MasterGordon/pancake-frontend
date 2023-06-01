@@ -7,13 +7,12 @@ import uniswapSchema from './schema/uniswap.json'
 import aptosSchema from './schema/aptos.json'
 
 const uniswapTokenListValidator = new Ajv({ allErrors: true }).compile(uniswapSchema)
-const aptosTokenListValidator = new Ajv({ allErrors: true }).compile(aptosSchema)
 
 /**
  * Contains the logic for resolving a list URL to a validated token list
  * @param listUrl list url
  */
-export default async function getTokenList(listUrl: string, isAptos: boolean): Promise<TokenList> {
+export default async function getTokenList(listUrl: string): Promise<TokenList> {
   const urls: string[] = uriToHttp(listUrl)
 
   for (let i = 0; i < urls.length; i++) {
@@ -34,7 +33,7 @@ export default async function getTokenList(listUrl: string, isAptos: boolean): P
     }
 
     const json = await response.json()
-    const tokenListValidator = isAptos ? aptosTokenListValidator : uniswapTokenListValidator
+    const tokenListValidator = uniswapTokenListValidator
     if (!tokenListValidator(json)) {
       const validationErrors: string =
         tokenListValidator.errors?.reduce<string>((memo, error) => {

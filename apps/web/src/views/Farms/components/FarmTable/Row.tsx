@@ -149,7 +149,7 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                 return (
                   <td key={key}>
                     <CellInner>
-                      <CellLayout label={t('APR')}>
+                      <CellLayout label={t('APY')}>
                         <Apy
                           {...props.apr}
                           hideButton={isSmallerScreen}

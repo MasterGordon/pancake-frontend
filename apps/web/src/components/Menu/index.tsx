@@ -1,12 +1,11 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Menu as UikitMenu, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation, languageList } from '@pancakeswap/localization'
-import PhishingWarningBanner from 'components/PhishingWarningBanner'
-import { NetworkSwitcher } from 'components/NetworkSwitcher'
-import useTheme from 'hooks/useTheme'
-import { useCakeBusdPrice } from 'hooks/useBUSDPrice'
-import { usePhishingBannerManager } from 'state/user/hooks'
+import PhishingWarningBanner from '../PhishingWarningBanner'
+import { NetworkSwitcher } from '../NetworkSwitcher'
+import useTheme from '../../hooks/useTheme'
+import { useCakeBusdPrice } from '../../hooks/useBUSDPrice'
 import UserMenu from './UserMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import GlobalSettings from './GlobalSettings'
@@ -35,19 +34,39 @@ const Menu = (props) => {
     return footerLinks(t)
   }, [t])
 
+  const subLinks = useMemo(() => {
+    if (activeSubMenuItem?.items?.length > 0) {
+      return activeSubMenuItem.items
+    }
+    for (const menuItem of menuItems) {
+      const parentSubLinks = menuItem.items?.find((item) => item.items?.includes(activeSubMenuItem))
+      if (parentSubLinks) {
+        return parentSubLinks.items
+      }
+    }
+
+    return activeMenuItem?.hideSubNav || activeSubMenuItem?.hideSubNav ? [] : activeMenuItem?.items
+  }, [activeMenuItem?.hideSubNav, activeMenuItem?.items, activeSubMenuItem, menuItems])
+
+  const linkComponent = useCallback((linkProps) => {
+    return <NextLinkFromReactRouter to={linkProps.href} {...linkProps} prefetch={false} />
+  }, [])
+
+  const rightSide = useMemo(() => {
+    return (
+      <>
+        <GlobalSettings mode={SettingsMode.GLOBAL} />
+        <NetworkSwitcher />
+        <UserMenu />
+      </>
+    )
+  }, [])
+
   return (
     <>
       <UikitMenu
-        linkComponent={(linkProps) => {
-          return <NextLinkFromReactRouter to={linkProps.href} {...linkProps} prefetch={false} />
-        }}
-        rightSide={
-          <>
-            <GlobalSettings mode={SettingsMode.GLOBAL} />
-            <NetworkSwitcher />
-            <UserMenu />
-          </>
-        }
+        linkComponent={linkComponent}
+        rightSide={rightSide}
         banner={showPhishingWarningBanner && typeof window !== 'undefined' && <PhishingWarningBanner />}
         isDark={isDark}
         toggleTheme={toggleTheme}
@@ -56,7 +75,7 @@ const Menu = (props) => {
         setLang={setLanguage}
         cakePriceUsd={cakePriceUsd}
         links={menuItems}
-        subLinks={activeMenuItem?.hideSubNav || activeSubMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
+        subLinks={subLinks}
         footerLinks={getFooterLinks}
         activeItem={activeMenuItem?.href}
         activeSubItem={activeSubMenuItem?.href}

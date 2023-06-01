@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import delay from 'lodash/delay'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Dots from 'components/Loader/Dots'
+import Dots from '../Loader/Dots'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 

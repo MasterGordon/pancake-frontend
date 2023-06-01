@@ -1,14 +1,10 @@
-import { formatEther } from '@ethersproject/units'
-import { FACTORY_ADDRESS } from '@pancakeswap/sdk'
 import { getUnixTime, sub } from 'date-fns'
 import { gql } from 'graphql-request'
 import { GetStaticProps } from 'next'
 import { SWRConfig } from 'swr'
-import { getCakeVaultAddress } from 'utils/addressHelpers'
-import { getIceContract } from 'utils/contractHelpers'
 import { getBlocksFromTimestamps } from 'utils/getBlocksFromTimestamps'
-import { bitQueryServerClient, infoServerClient } from 'utils/graphql'
-import { CHAIN_IDS } from 'utils/wagmi'
+import { bitQueryServerClient, infoServerClient } from '../utils/graphql'
+import { CHAIN_IDS } from '../utils/wagmi'
 import Home from '../views/Home'
 
 const IndexPage = ({ totalTx30Days, addressCount30Days, tvl }) => {
@@ -50,40 +46,6 @@ export const getStaticProps: GetStaticProps = async () => {
     tvl,
   }
 
-  if (process.env.SF_HEADER) {
-    try {
-      const [days30AgoBlock] = await getBlocksFromTimestamps([getUnixTime(days30Ago)])
-
-      if (!days30AgoBlock) {
-        throw new Error('No block found for 30 days ago')
-      }
-
-      const totalTx = await infoServerClient.request(totalTxQuery, {
-        id: FACTORY_ADDRESS,
-      })
-      const totalTx30DaysAgo = await infoServerClient.request(totalTxQuery, {
-        block: {
-          number: days30AgoBlock.number,
-        },
-        id: FACTORY_ADDRESS,
-      })
-
-      if (
-        totalTx?.pancakeFactory?.totalTransactions &&
-        totalTx30DaysAgo?.pancakeFactory?.totalTransactions &&
-        parseInt(totalTx.pancakeFactory.totalTransactions) > parseInt(totalTx30DaysAgo.pancakeFactory.totalTransactions)
-      ) {
-        results.totalTx30Days =
-          parseInt(totalTx.pancakeFactory.totalTransactions) -
-          parseInt(totalTx30DaysAgo.pancakeFactory.totalTransactions)
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV === 'production') {
-        console.error('Error when fetching total tx count', error)
-      }
-    }
-  }
-
   const usersQuery = gql`
     query userCount($since: ISO8601DateTime, $till: ISO8601DateTime) {
       ethereum(network: bsc) {
@@ -107,26 +69,6 @@ export const getStaticProps: GetStaticProps = async () => {
       if (process.env.NODE_ENV === 'production') {
         console.error('Error when fetching address count', error)
       }
-    }
-  }
-
-  try {
-    const result = await infoServerClient.request(gql`
-      query tvl {
-        uniswapFactories(first: 1) {
-          totalLiquidityUSD
-        }
-      }
-    `)
-    const cake = await (await fetch('https://farms.pancake-swap.workers.dev/price/cake')).json()
-    const { totalLiquidityUSD } = result.uniswapFactories[0]
-    const cakeVaultV2 = getCakeVaultAddress()
-    const cakeContract = getIceContract()
-    const totalCakeInVault = await cakeContract.balanceOf(cakeVaultV2)
-    results.tvl = parseFloat(formatEther(totalCakeInVault)) * cake.price + parseFloat(totalLiquidityUSD)
-  } catch (error) {
-    if (process.env.NODE_ENV === 'production') {
-      console.error('Error when fetching tvl stats', error)
     }
   }
 

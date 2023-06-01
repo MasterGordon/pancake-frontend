@@ -10,12 +10,12 @@ import {
   ERC20Token,
   WETH9,
 } from '@pancakeswap/sdk'
-import { FAST_INTERVAL } from 'config/constants'
+import { FAST_INTERVAL } from '../config/constants'
 import { USD, ICE } from '@pancakeswap/tokens'
 import { useMemo } from 'react'
 import useSWR from 'swr'
-import getLpAddress from 'utils/getLpAddress'
-import { multiplyPriceByAmount } from 'utils/prices'
+import getLpAddress from '../utils/getLpAddress'
+import { multiplyPriceByAmount } from '../utils/prices'
 import { useProvider } from 'wagmi'
 import { usePairContract } from './useContract'
 import { PairState, usePairs } from './usePairs'

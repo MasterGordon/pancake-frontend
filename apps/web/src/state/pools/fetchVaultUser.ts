@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
-import {SerializedLockedVaultUser, SerializedVaultUser} from 'state/types'
-import {getCakeVaultAddress} from 'utils/addressHelpers'
-import cakeVaultAbi from 'config/abi/cakeVaultV2.json'
-import {multicallv2} from 'utils/multicall'
-import {ChainId} from "@pancakeswap/sdk";
-import {getCakeFlexibleSideVaultV2Contract} from '../../utils/contractHelpers'
+import { SerializedLockedVaultUser, SerializedVaultUser } from 'state/types'
+import { getCakeVaultAddress } from '../../utils/addressHelpers'
+import cakeVaultAbi from '../../config/abi/cakeVaultV2.json'
+import { multicallv2 } from '../../utils/multicall'
+import { ChainId } from '@pancakeswap/sdk'
+import { getCakeFlexibleSideVaultV2Contract } from '../../utils/contractHelpers'
 
 const cakeVaultAddress = getCakeVaultAddress()
 const flexibleSideVaultContract = getCakeFlexibleSideVaultV2Contract()

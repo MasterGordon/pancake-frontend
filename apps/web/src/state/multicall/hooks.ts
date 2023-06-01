@@ -8,7 +8,7 @@ import {
   // eslint-disable-next-line camelcase
   unstable_serialize,
 } from 'swr'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useActiveChainId } from '../../hooks/useActiveChainId'
 import { AppState, useAppDispatch } from '../index'
 import {
   addMulticallListeners,

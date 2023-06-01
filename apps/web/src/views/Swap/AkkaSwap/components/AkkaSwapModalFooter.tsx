@@ -25,11 +25,15 @@ export default function AkkaSwapModalFooter({
   isEnoughInputBalance,
   onConfirm,
   swapErrorMessage,
+  inputAmountInDollar,
+  outputAmountInDollar
 }: {
   trade: AkkaRouterTrade
   isEnoughInputBalance: boolean
   onConfirm: () => void
   swapErrorMessage?: string | undefined
+  inputAmountInDollar: number
+  outputAmountInDollar: number
 }) {
   const { t } = useTranslation()
   const [showInverted, setShowInverted] = useState<boolean>(false)
@@ -39,13 +43,14 @@ export default function AkkaSwapModalFooter({
   const treasuryFeePercent = `${(TREASURY_FEE * 100).toFixed(4)}%`
   const buyBackFeePercent = `${(BUYBACK_FEE * 100).toFixed(4)}%`
   const { chainId } = useActiveChainId()
-  const fee = trade?.route?.routes[chainId.toString()]?.map((item, index) => {
+  const fee = trade?.route?.routes?.[chainId.toString()]?.map((item, index) => {
     return item.inputAmount * item.routes[0].operations.length * 0.003
   })
   const realizedLPFee = fee.reduce((accumulator, value) => {
     return accumulator + value
   }, 0)
 
+  const priceImpact = (1 - (outputAmountInDollar / inputAmountInDollar)) * 100
   return (
     <>
       <SwapModalFooterContainer>
@@ -56,7 +61,7 @@ export default function AkkaSwapModalFooter({
             </Text>
           </RowFixed>
           <Text fontSize="14px" color="textSubtle">
-            {trade.route.priceImpact.toFixed(3)}%
+            {priceImpact.toFixed(3)}%
           </Text>
         </RowBetween>
         {trade.route.returnAmountInUsd - trade.route.bestAlt > 0 &&

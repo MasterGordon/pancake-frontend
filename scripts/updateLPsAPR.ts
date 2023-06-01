@@ -6,8 +6,6 @@ import chunk from 'lodash/chunk'
 import { sub, getUnixTime } from 'date-fns'
 import { ChainId } from '@pancakeswap/sdk'
 import { SerializedFarmConfig } from '@pancakeswap/farms'
-import { StaticJsonRpcProvider } from '@ethersproject/providers'
-import { BlockResponse } from 'web/src/components/SubgraphHealthIndicator'
 import { BLOCKS_CLIENT_WITH_CHAIN } from 'web/src/config/constants/endpoints'
 import { stableSwapClient, infoClientWithChain } from 'web/src/utils/graphql'
 
@@ -36,8 +34,12 @@ const WEEKS_IN_A_YEAR = 52.1429
 
 const getBlockAtTimestamp = async (timestamp: number, chainId: ChainId) => {
   try {
-    const { blocks } = await request<BlockResponse>(
-      BLOCKS_CLIENT_WITH_CHAIN[chainId],
+    const blockClient = BLOCKS_CLIENT_WITH_CHAIN[chainId]
+    if (!blockClient){
+      throw new Error(`missing block client for chainId ${chainId}`)
+    }
+    const { blocks } = await request<any>(
+        blockClient,
       `query getBlock($timestampGreater: Int!, $timestampLess: Int!) {
         blocks(first: 1, where: { timestamp_gt: $timestampGreater, timestamp_lt: $timestampLess }) {
           number
@@ -155,7 +157,7 @@ function splitNormalAndStableFarmsReducer(result: SplitFarmResult, farm: any): S
 }
 // ====
 
-const FETCH_CHAIN_ID = [ChainId.BITGERT, ChainId.XDC]
+const FETCH_CHAIN_ID = [ChainId.BITGERT, ChainId.CORE]
 const fetchAndUpdateLPsAPR = async () => {
   Promise.all(
     FETCH_CHAIN_ID.map(async (chainId) => {

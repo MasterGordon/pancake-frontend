@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Button, Heading, Text, LogoIcon } from '@pancakeswap/uikit'
-import Page from 'components/Layout/Page'
+import Page from '../components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import Link from 'next/link'
 
@@ -21,7 +21,7 @@ const NotFound = ({ statusCode = 404 }: { statusCode?: number }) => {
         <LogoIcon width="64px" mb="8px" />
         <Heading scale="xxl">{statusCode}</Heading>
         <Text mb="16px">{t('Oops, page not found.')}</Text>
-        <Link href="/" passHref>
+        <Link href="/" passHref prefetch={false}>
           <Button as="a" scale="sm">
             {t('Back Home')}
           </Button>

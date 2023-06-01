@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
-import { multicallv2 } from 'utils/multicall'
-import cakeVaultAbi from 'config/abi/cakeVaultV2.json'
-import { getCakeVaultAddress, getCakeFlexibleSideVaultAddress } from 'utils/addressHelpers'
+import { multicallv2 } from '../../utils/multicall'
+import cakeVaultAbi from '../../config/abi/cakeVaultV2.json'
+import { getCakeVaultAddress, getCakeFlexibleSideVaultAddress } from '../../utils/addressHelpers'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getIceContract } from 'utils/contractHelpers'
-import {ChainId} from "@pancakeswap/sdk";
+import { getIceContract } from '../../utils/contractHelpers'
+import { ChainId } from '@pancakeswap/sdk'
 
 const cakeVaultV2 = getCakeVaultAddress()
 const cakeFlexibleSideVaultV2 = getCakeFlexibleSideVaultAddress()
@@ -48,7 +48,10 @@ export const fetchPublicVaultData = async (chainId: ChainId, cakeVaultAddress = 
   }
 }
 
-export const fetchPublicFlexibleSideVaultData = async (chainId: ChainId, cakeVaultAddress = cakeFlexibleSideVaultV2) => {
+export const fetchPublicFlexibleSideVaultData = async (
+  chainId: ChainId,
+  cakeVaultAddress = cakeFlexibleSideVaultV2,
+) => {
   try {
     const calls = ['getPricePerFullShare', 'totalShares'].map((method) => ({
       address: cakeVaultAddress,
@@ -89,8 +92,11 @@ export const fetchVaultFees = async (chainId: ChainId, cakeVaultAddress = cakeVa
       name: method,
     }))
 
-    // @ts-ignore fix chainId support
-    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2({ abi: cakeVaultAbi, calls }, chainId)
+    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(
+      { abi: cakeVaultAbi, calls },
+      // @ts-ignore fix chainId support
+      chainId,
+    )
 
     return {
       performanceFee: performanceFee.toNumber(),

@@ -8,12 +8,12 @@ import {
   Multicall,
   Weth,
   Zap,
-} from 'config/abi/types'
-import zapAbi from 'config/abi/zap.json'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useProviderOrSigner } from 'hooks/useProviderOrSigner'
+} from '../config/abi/types'
+import zapAbi from '../config/abi/zap.json'
+import useActiveWeb3React from './useActiveWeb3React'
+import { useProviderOrSigner } from './useProviderOrSigner'
 import { useMemo } from 'react'
-import { getMulticallAddress, getPredictionsV1Address, getZapAddress } from 'utils/addressHelpers'
+import { getMulticallAddress, getPredictionsV1Address, getZapAddress } from '../utils/addressHelpers'
 import {
   getAnniversaryAchievementContract,
   getBCakeFarmBoosterContract,
@@ -59,21 +59,21 @@ import {
   getTradingCompetitionContractMoD,
   getNonBscVaultContract,
   getCrossFarmingProxyContract,
-} from 'utils/contractHelpers'
+} from '../utils/contractHelpers'
 import { useSigner } from 'wagmi'
 
 // Imports below migrated from Exchange useContract.ts
 import { Contract } from '@ethersproject/contracts'
 import { WNATIVE } from '@pancakeswap/sdk'
-import { ERC20_BYTES32_ABI } from 'config/abi/erc20'
-import ERC20_ABI from 'config/abi/erc20.json'
-import IPancakePairABI from 'config/abi/IPancakePair.json'
-import multiCallAbi from 'config/abi/Multicall.json'
-import WETH_ABI from 'config/abi/weth.json'
-import { getContract } from 'utils'
+import { ERC20_BYTES32_ABI } from '../config/abi/erc20'
+import ERC20_ABI from '../config/abi/erc20.json'
+import IPancakePairABI from '../config/abi/IPancakePair.json'
+import multiCallAbi from '../config/abi/Multicall.json'
+import WETH_ABI from '../config/abi/weth.json'
+import { getContract } from '../utils'
 
-import { IPancakePair } from 'config/abi/types/IPancakePair'
-import { VaultKey } from 'state/types'
+import { IPancakePair } from '../config/abi/types/IPancakePair'
+import { VaultKey } from '../state/types'
 import { useActiveChainId } from './useActiveChainId'
 
 /**

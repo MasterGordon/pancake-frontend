@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { useGasPrice } from 'state/user/hooks'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { StableTrade } from 'views/Swap/StableSwap/hooks/useStableTradeExactIn'
-import { logSwap, logTx } from 'utils/log'
+import { logTx } from 'utils/log'
 
 import { INITIAL_ALLOWED_SLIPPAGE } from '../config/constants'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -97,7 +97,7 @@ export function useSwapCallback(
                   })
                   .catch((callError) => {
                     console.error('Call threw error', call, callError)
-                    
+
                     return { call, error: transactionErrorToUserReadableMessage(callError, t) }
                   })
               })
@@ -175,13 +175,6 @@ export function useSwapCallback(
                 },
               },
               type: 'swap',
-            })
-            logSwap({
-              chainId,
-              inputAmount,
-              outputAmount,
-              input: trade.inputAmount.currency,
-              output: trade.outputAmount.currency,
             })
             logTx({ account, chainId, hash: response.hash })
 

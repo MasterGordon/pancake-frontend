@@ -1,5 +1,5 @@
 import { ERC20Token, Pair } from '@pancakeswap/sdk'
-import { isAddress } from 'utils'
+import { isAddress } from '.'
 
 const getLpAddress = (token1: string | ERC20Token, token2: string | ERC20Token, chainId: number) => {
   let token1AsTokenInstance = token1

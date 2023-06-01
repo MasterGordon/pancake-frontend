@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 
-const SubgraphHealthIndicator = dynamic(() => import('components/SubgraphHealthIndicator'), { ssr: false })
+const SubgraphHealthIndicator = dynamic(() => import('.'), { ssr: false })
 
 export const FixedSubgraphHealthIndicator = () => {
   const { pathname } = useRouter()

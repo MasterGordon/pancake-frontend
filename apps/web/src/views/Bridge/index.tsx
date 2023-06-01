@@ -1,5 +1,5 @@
 import { AtomBox } from '@pancakeswap/ui'
-import { Button, Checkbox, Flex, Heading, Input, Select, Text } from '@pancakeswap/uikit'
+import { Checkbox, Flex, Heading, Input, Link, Select, Text } from '@pancakeswap/uikit'
 import { AppBody } from 'components/App'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { ChainLogo } from 'components/Logo/ChainLogo'
@@ -15,13 +15,13 @@ import { useBridgeTax } from './hooks/useBridgeTax'
 import Divider from 'views/Farms/components/Divider'
 import FormError from './components/FormError'
 import { useFormErrors } from './hooks/useFormErrors'
-import { useDeposit } from './hooks/useDeposit'
 import { useRouter } from 'next/router'
 import DepositButton from './components/DepositButton'
 import { formatAmount } from './formatter'
 import chainName from 'config/constants/chainName'
+import { SUPPORT_BRIDGE } from 'config/constants/supportChains'
+import { useSupportedChainList } from 'hooks/useSupportedChains'
 
-// Bump
 const Bridge = () => {
   const { account, chainId: accountChainId } = useWeb3React()
   const { switchNetworkAsync } = useSwitchNetwork()
@@ -45,18 +45,21 @@ const Bridge = () => {
   const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const tax = useBridgeTax()
   const { formErrors, validateForm, setHasSubmitted } = useFormErrors(tax.bridgeFee, tax.bridgeFeeToken)
+  const supportedNames = useSupportedChainList()
 
   const homeChainOptions = useMemo(
     () =>
-      chains.map((chain) => ({
-        label: (
-          <>
-            <ChainLogo chainId={chain.id} />
-            {chainName[chain.id]}
-          </>
-        ),
-        value: chain.id,
-      })),
+      chains
+        .filter((chain) => SUPPORT_BRIDGE.includes(chain.id))
+        .map((chain) => ({
+          label: (
+            <>
+              <ChainLogo chainId={chain.id} />
+              {chainName[chain.id]}
+            </>
+          ),
+          value: chain.id,
+        })),
     [],
   )
 
@@ -64,6 +67,7 @@ const Bridge = () => {
     () =>
       chains
         .filter((chain) => chain.id !== chainId)
+        .filter((chain) => SUPPORT_BRIDGE.includes(chain.id))
         .map((chain) => ({
           label: (
             <>
@@ -111,7 +115,7 @@ const Bridge = () => {
                   <div>
                     <CurrencyInputPanel
                       label="Amount"
-                      value={depositAmount.toString()}
+                      value={depositAmount}
                       showMaxButton
                       showQuickInputButton
                       onUserInput={(value) => {
@@ -178,6 +182,17 @@ const Bridge = () => {
               </AppBody>
             </StyledInputCurrencyWrapper>
           </StyledBridgeContainer>
+          {/* <Text lineHeight="125%" padding="24px" marginTop="36px" maxWidth="560px"> */}
+          {/*   <Heading marginBottom="16px">About our Bridge</Heading> */}
+          {/*   The Bridge allows you to transfer tokens between chains. We charge a small fee to cover the cost of the gas, */}
+          {/*   the tax is 1% of the transfer amount. Transactions are processed by our bridge smart contract - this way */}
+          {/*   transactions can never get lost. We are currently supporting {supportedNames}. For more information, please */}
+          {/*   visit our{' '} */}
+          {/*   <Link href="https://wiki.icecreamswap.com/dex/bridge" display="inline-flex" external target="_blank"> */}
+          {/*     Wiki */}
+          {/*   </Link> */}
+          {/*   . */}
+          {/* </Text> */}
         </Flex>
       </Flex>
     </Page>

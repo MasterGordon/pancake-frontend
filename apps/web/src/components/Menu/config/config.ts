@@ -7,6 +7,9 @@ import {
   DropdownMenuItems,
   InfoIcon,
   BridgeIcon,
+  DropdownMenuItemType,
+  RocketIcon,
+  MoreHorizontalIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
 import {
@@ -15,9 +18,13 @@ import {
   SUPPORT_INFO,
   SUPPORT_SWAP,
   SUPPORT_BRIDGE,
+  SUPPORT_LOCKS,
 } from '../../../config/constants/supportChains'
 
-export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
+export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
+  hideSubNav?: boolean
+  items?: ConfigMenuDropDownItemsType[]
+}
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
   items?: ConfigMenuDropDownItemsType[]
 }
@@ -69,7 +76,7 @@ const config: (
         /*
         {
           label: t('Perpetual'),
-          href: `https://perp.pancakeswap.finance/${perpLangMap(languageCode)}/futures/BTCUSDT?theme=${perpTheme(
+          href: `https://perp.icecreamswap.com/${perpLangMap(languageCode)}/futures/BTCUSDT?theme=${perpTheme(
             isDark,
           )}`,
           supportChainIds: SUPPORT_ONLY_BSC,
@@ -77,7 +84,7 @@ const config: (
         },
         {
           label: t('Bridge'),
-          href: 'https://bridge.pancakeswap.finance/',
+          href: 'https://bridge.icecreamswap.com/',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
            */
@@ -180,13 +187,98 @@ const config: (
     },
     */
     {
-      label: t('Info'),
-      href: '/info',
-      icon: InfoIcon,
-      supportChainIds: SUPPORT_INFO,
+      label: t('Launchpad'),
+      href: '/launchpad',
+      icon: RocketIcon,
       hideSubNav: true,
       showItemsOnMobile: false,
       items: [],
+    },
+    {
+      label: t('More'),
+      icon: MoreHorizontalIcon,
+      showItemsOnMobile: true,
+      hideSubNav: true,
+      supportChainIds: [...SUPPORT_INFO, ...SUPPORT_LOCKS],
+      items: [
+        {
+          label: t('Info'),
+          href: '/info',
+          supportChainIds: SUPPORT_INFO,
+        },
+        {
+          label: t('Locks'),
+          href: '/locks',
+          supportChainIds: SUPPORT_LOCKS,
+        },
+        {
+          label: t('KYC'),
+          href: '/kyc',
+          supportChainIds: [1116],
+          items: [
+            {
+              label: t('KYC'),
+              href: '/kyc',
+            },
+            {
+              label: t('KYC Checker'),
+              href: '/kyc-checker',
+            },
+            {
+              label: t('KYC Delegator'),
+              href: '/kyc-delegator',
+            },
+          ],
+        },
+        {
+          label: t('KYC Checker'),
+          href: '/kyc-checker',
+          supportChainIds: [1116],
+          items: [
+            {
+              label: t('KYC'),
+              href: '/kyc',
+            },
+            {
+              label: t('KYC Checker'),
+              href: '/kyc-checker',
+            },
+            {
+              label: t('KYC Delegator'),
+              href: '/kyc-delegator',
+            },
+          ],
+        },
+        {
+          label: t('KYC Delegator'),
+          href: '/kyc-delegator',
+          supportChainIds: [1116],
+          items: [
+            {
+              label: t('KYC'),
+              href: '/kyc',
+            },
+            {
+              label: t('KYC Checker'),
+              href: '/kyc-checker',
+            },
+            {
+              label: t('KYC Delegator'),
+              href: '/kyc-delegator',
+            },
+          ],
+        },
+        {
+          label: t('Wiki'),
+          href: 'https://wiki.icecreamswap.com',
+          type: DropdownMenuItemType.EXTERNAL_LINK,
+        },
+        // {
+        //   label: t('Create Token'),
+        //   href: '/create-token',
+        //   supportChainIds: SUPPORT_LOCKS,
+        // },
+      ].map((item) => addMenuItemSupported(item, chainId)),
     },
     /*
     {
@@ -230,7 +322,7 @@ const config: (
         },
         {
           label: t('Docs'),
-          href: 'https://docs.pancakeswap.finance',
+          href: 'https://docs.icecreamswap.com',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),

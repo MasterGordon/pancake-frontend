@@ -1,4 +1,5 @@
 export interface AkkaRouterArgsResponseType {
+  akkaFee: AkkaFeeType
   amountIn: string
   amountOutMin: string
   bridge: []
@@ -7,6 +8,14 @@ export interface AkkaRouterArgsResponseType {
   to: string
   value: string
   valueHex: string
+}
+
+export interface AkkaFeeType {
+  fee: string,
+  r: string,
+  s: string,
+  signature: string,
+  v: string
 }
 
 export interface AkkaRouterTrade {
@@ -22,6 +31,7 @@ export interface AkkaRouterInfoResponseType {
   returnAmount: string
   returnAmountWei: string
   returnAmountInUsd: number
+  returnAmountWithoutTaxWei: string
   routes: BitgertRouteResponseDto
 }
 

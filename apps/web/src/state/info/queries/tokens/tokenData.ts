@@ -131,10 +131,10 @@ const useFetchedTokenDatas = (chainName: MultiChainName, tokenAddresses: string[
     const fetch = async () => {
       const { error, data } = await fetchTokenData(
         chainName,
-        block24h.number,
-        block48h.number,
-        block7d.number,
-        block14d.number,
+        block24h?.number,
+        block48h?.number,
+        block7d?.number,
+        block14d?.number,
         tokenAddresses,
       )
 
@@ -217,10 +217,10 @@ export const fetchAllTokenDataByAddresses = async (
 
   const { data } = await fetchTokenData(
     chainName,
-    block24h.number,
-    block48h.number,
-    block7d.number,
-    block14d.number,
+    block24h?.number,
+    block48h?.number,
+    block7d?.number,
+    block14d?.number,
     tokenAddresses,
   )
 

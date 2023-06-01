@@ -1,6 +1,5 @@
 import { Flex, Link, LinkExternal, Skeleton, Text, TimerIcon, Balance, Pool } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
-import { bsc } from '@pancakeswap/wagmi/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { memo } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
@@ -127,7 +126,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
       )}
       {vaultKey && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <LinkExternal href="https://docs.pancakeswap.finance/products/syrup-pool/new-cake-pool" bold={false} small>
+          <LinkExternal href="https://docs.icecreamswap.com/products/syrup-pool/new-cake-pool" bold={false} small>
             {t('View Tutorial')}
           </LinkExternal>
         </Flex>
@@ -135,9 +134,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
       {poolContractAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal
-            href={`${bsc.blockExplorers.default.url}/address/${
-              vaultKey ? cakeVaultContractAddress : poolContractAddress
-            }`}
+            href={getBlockExploreLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address', chainId)}
             bold={false}
             small
           >
@@ -157,7 +154,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
             tokenAddress={tokenAddress}
             tokenSymbol={earningToken.symbol}
             tokenDecimals={earningToken.decimals}
-            tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
+            tokenLogo={`https://tokens.icecreamswap.com/images/${tokenAddress}.png`}
           />
         </Flex>
       )}

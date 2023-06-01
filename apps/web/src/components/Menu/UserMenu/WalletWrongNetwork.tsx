@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Text, Link, HelpIcon, Message, MessageText } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
-import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useSwitchNetwork } from '../../../hooks/useSwitchNetwork'
 
 const StyledLink = styled(Link)`
   width: 100%;
@@ -36,12 +36,6 @@ const WalletWrongNetwork: React.FC<React.PropsWithChildren<WalletWrongNetworkPro
           <MessageText>{t('Unable to switch network. Please try it on your wallet')}</MessageText>
         </Message>
       )}
-      <StyledLink href="https://docs.pancakeswap.finance/get-started/connection-guide" external>
-        <Button width="100%" variant="secondary">
-          {t('Learn How')}
-          <HelpIcon color="primary" ml="6px" />
-        </Button>
-      </StyledLink>
     </>
   )
 }

@@ -5,10 +5,12 @@ import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import type { Provider } from '@ethersproject/providers'
 import { ChainId, Currency } from '@pancakeswap/sdk'
-import { bsc } from '@pancakeswap/wagmi/chains'
 import memoize from 'lodash/memoize'
 import { TokenAddressMap } from '@pancakeswap/token-lists'
 import { chains } from './wagmi'
+import { chainMap } from '@icecreamswap/constants'
+
+const { bsc } = chainMap
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export const isAddress = memoize((value: any): string | false => {

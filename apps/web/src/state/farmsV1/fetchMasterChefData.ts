@@ -1,11 +1,11 @@
-import masterchefABIV1 from 'config/abi/masterchefV1.json'
+import masterchefABIV1 from '../../config/abi/masterchefV1.json'
 import chunk from 'lodash/chunk'
-import { multicallv2 } from 'utils/multicall'
+import { multicallv2 } from '../../utils/multicall'
 import { SerializedFarm } from '@pancakeswap/farms'
 import { SerializedFarmConfig } from '../../config/constants/types'
 import { getMasterChefV1Address } from '../../utils/addressHelpers'
 import { getMasterchefV1Contract } from '../../utils/contractHelpers'
-import {ChainId} from "@pancakeswap/sdk";
+import { ChainId } from '@pancakeswap/sdk'
 
 const masterChefAddress = getMasterChefV1Address()
 const masterChefContract = getMasterchefV1Contract()
@@ -39,7 +39,11 @@ export const fetchMasterChefData = async (farms: SerializedFarmConfig[], chainId
     .filter((masterChefCall) => masterChefCall[0] !== null && masterChefCall[1] !== null)
     .flat()
   // @ts-ignore fix chainId support
-  const masterChefMultiCallResult = await multicallv2({ abi: masterchefABIV1, calls: masterChefAggregatedCalls, chainId })
+  const masterChefMultiCallResult = await multicallv2({
+    abi: masterchefABIV1,
+    calls: masterChefAggregatedCalls,
+    chainId,
+  })
   const masterChefChunkedResultRaw = chunk(masterChefMultiCallResult, chunkSize)
   let masterChefChunkedResultCounter = 0
   return masterChefCalls.map((masterChefCall) => {

@@ -9,9 +9,9 @@ import earnIce from '../../../../../public/images/home/earn/ice.png'
 export const swapSectionData = (t: TranslateFunction): SalesSectionProps => ({
   headingText: t('Trade anything anywhere, hassle free'),
   bodyText: t(
-      'IceCreamSwap lets everyone trade any token on multiple chains. ' +
-      'A very intuitive UI lets both new and experienced DeFi users fully emerge in the world of crypto trading. ' +
-      'As the first DEX implementing route splitting, the best possible output with the lowest slippage is guaranteed. '
+      'IceCreamSwap contracts lets everyone trade any token on multiple chains. ' +
+      'A intuitive UI lets both new and experienced DeFi users easily interact with the IceCreamSwap smart contracts. ' +
+      'As the first DEX implementing route splitting, the best possible output with the lowest slippage can be archived. '
   ),
   reverse: false,
   primaryButton: {
@@ -39,7 +39,7 @@ export const bridgeSectionData = (t: TranslateFunction): SalesSectionProps => ({
       'A novel approach of a second (redundant) security layer will make the IceCream Bridge even more secure ' +
       'than the audited and battle tested code it is built on top of. ' +
       'All bridge reserves are transparent on chain and can be verified any time. ' +
-      'Due to its universal implementation even raw data and NFTs will be supported by the Bridge.',
+      'Due to its universal implementation even universal message parsing and NFTs will be supported by the Bridge.',
   ),
   reverse: true,
   primaryButton: {
@@ -61,12 +61,12 @@ export const bridgeSectionData = (t: TranslateFunction): SalesSectionProps => ({
 })
 
 export const earnSectionData = (t: TranslateFunction): SalesSectionProps => ({
-  headingText: t('Earn, let your tokens work for you.'),
-  bodyText: t('Thanks to liquidity farming pools, you can earn passive income on top of your crypto tokens.'),
+  headingText: t('Earn, receive ICE tokens when providing liquidity.'),
+  bodyText: t('Thanks to liquidity farming pools, you can receive ICE tokens when you provide liquidity.'),
   reverse: false,
   primaryButton: {
     to: '/farms',
-    text: t('Explore'),
+    text: t('Farms'),
     external: false,
   },
   secondaryButton: {

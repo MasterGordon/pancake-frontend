@@ -19,18 +19,18 @@ import {
   useUserSingleHopOnly,
   useZapModeManager,
   useUserUsernameVisibility,
-} from 'state/user/hooks'
+} from '../../../state/user/hooks'
 import { ChainId } from '@pancakeswap/sdk'
-import { SUPPORT_ZAP } from 'config/constants/supportChains'
-import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { SUPPORT_ZAP } from '../../../config/constants/supportChains'
+import { useSwapActionHandlers } from '../../../state/swap/useSwapActionHandlers'
+import { useActiveChainId } from '../../../hooks/useActiveChainId'
 import { useTranslation } from '@pancakeswap/localization'
-import useTheme from 'hooks/useTheme'
+import useTheme from '../../../hooks/useTheme'
 import TransactionSettings from './TransactionSettings'
 import ExpertModal from './ExpertModal'
 import GasSettings from './GasSettings'
 import { SettingsMode } from './types'
-import { useIsAkkaSwapModeActive, useIsAkkaSwapModeStatus } from 'state/global/hooks'
+import { useIsAkkaSwapModeActive, useIsAkkaSwapModeStatus } from '../../../state/global/hooks'
 
 const ScrollableContainer = styled(Flex)`
   flex-direction: column;

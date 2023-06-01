@@ -69,11 +69,7 @@ export function useAkkaSwapInfo(
     inputError = inputError ?? t('Enter a recipient')
   }
 
-  if (
-    currencyBalances[Field.INPUT] &&
-    parsedAmount &&
-    currencyBalances[Field.INPUT].lessThan(parsedAmount)
-  ) {
+  if (currencyBalances[Field.INPUT] && parsedAmount && currencyBalances[Field.INPUT].lessThan(parsedAmount)) {
     inputError = t('Insufficient %symbol% balance', { symbol: inputCurrency.symbol })
   }
 

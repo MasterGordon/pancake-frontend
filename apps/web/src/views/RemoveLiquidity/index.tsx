@@ -585,7 +585,7 @@ export default function RemoveLiquidity({ currencyA, currencyB, currencyIdA, cur
             </RowBetween>
             {!showDetailed && (
               <BorderCard>
-                <Text fontSize="40px" bold mb="16px" style={{ lineHeight: 1 }}>
+                <Text fontSize="32px" bold mb="16px" style={{ lineHeight: 1 }}>
                   {formattedAmounts[Field.LIQUIDITY_PERCENT]}%
                 </Text>
                 <Slider
