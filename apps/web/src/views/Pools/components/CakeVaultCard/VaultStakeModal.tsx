@@ -42,7 +42,8 @@ import { VaultRoiCalculatorModal } from '../Vault/VaultRoiCalculatorModal'
 import ConvertToLock from '../LockedPool/Common/ConvertToLock'
 import FeeSummary from './FeeSummary'
 import { MIN_LOCK_AMOUNT, convertCakeToShares } from '../../helpers'
-import {useActiveChainId} from "../../../../hooks/useActiveChainId";
+import { useActiveChainId } from '../../../../hooks/useActiveChainId'
+import getTokenLogoURL from '@pancakeswap/uikit/src/util/getTokenLogoURL'
 
 interface VaultStakeModalProps {
   pool: Pool.DeserializedPool<Token>
@@ -236,7 +237,12 @@ const VaultStakeModal: React.FC<React.PropsWithChildren<VaultStakeModalProps>> =
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
         <Flex alignItems="center" minWidth="70px">
-          <Image src={`/images/tokens/${stakingToken.address}.png`} width={24} height={24} alt={stakingToken.symbol} />
+          <Image
+            src={getTokenLogoURL(stakingToken.chainId, stakingToken.address)}
+            width={24}
+            height={24}
+            alt={stakingToken.symbol}
+          />
           <Text ml="4px" bold>
             {stakingToken.symbol}
           </Text>

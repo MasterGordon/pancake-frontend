@@ -9,11 +9,13 @@ import { WagmiProvider } from '@pancakeswap/wagmi'
 import { client } from './utils/wagmi'
 import { HistoryManagerProvider } from './contexts/HistoryContext'
 import { GasPriceProvider } from './state/user/hooks'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const StyledUIKitProvider: React.FC<React.PropsWithChildren> = ({ children, ...props }) => {
   const { resolvedTheme } = useNextTheme()
+  const { chainId } = useActiveChainId()
   return (
-    <UIKitProvider theme={resolvedTheme === 'dark' ? dark : light} {...props}>
+    <UIKitProvider theme={resolvedTheme === 'dark' ? dark : light} chainId={chainId} {...props}>
       {children}
     </UIKitProvider>
   )

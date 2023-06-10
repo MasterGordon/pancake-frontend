@@ -24,6 +24,8 @@ import {
   RoiCalculatorModal,
 } from "../../components";
 import { Modal } from "../Modal";
+import getTokenLogoURL from "../../util/getTokenLogoURL";
+import { useChainId } from "../../contexts/ChainIdContext/useChainId";
 
 const StyledLink = styled(Link)`
   width: 100%;
@@ -155,6 +157,7 @@ export const StakeModal: React.FC<React.PropsWithChildren<StakeModalProps>> = ({
     },
     [getCalculatedStakingLimit, stakingTokenDecimals]
   );
+  const chainId = useChainId();
 
   if (showRoiCalculator) {
     return (
@@ -192,7 +195,7 @@ export const StakeModal: React.FC<React.PropsWithChildren<StakeModalProps>> = ({
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text bold>{isRemovingStake ? t("Unstake") : t("Stake")}:</Text>
         <Flex alignItems="center" minWidth="70px">
-          <Image src={`/images/tokens/${stakingTokenAddress}.png`} width={24} height={24} alt={stakingTokenSymbol} />
+          <Image src={getTokenLogoURL(chainId, stakingTokenAddress)} width={24} height={24} alt={stakingTokenSymbol} />
           <Text ml="4px" bold>
             {stakingTokenSymbol}
           </Text>

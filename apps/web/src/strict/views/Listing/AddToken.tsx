@@ -1,16 +1,18 @@
-import { Button, Checkbox, Flex, Heading, Input, Text, useModal, useToast } from '@pancakeswap/uikit'
+import { Button, Flex, Input, Text, useToast } from '@pancakeswap/uikit'
 import AppWrapper from '../../../components/AppWrapper'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import FormError from '../../../views/Bridge/components/FormError'
 import FileInput from '../../../components/FileInput'
-import { FormValues, schema, toBase64 } from './add-token-schema'
-import { useEffect, useMemo, useState } from 'react'
+import { FormValues, schema } from './add-token-schema'
+import { useEffect, useState } from 'react'
 import { useToken } from '../../../hooks/Tokens'
 import styled from 'styled-components'
 import { convertImage } from './convert-image'
 import { trpc } from '@icecreamswap/backend'
 import { useActiveChainId } from '../../../hooks/useActiveChainId'
+import { utils } from 'ethers'
+import { getAddress } from '@ethersproject/address'
 
 const Logo = styled.img`
   width: 128px;
@@ -44,6 +46,10 @@ export const AddToken: React.FC = () => {
     }
     a()
   }, [logoFile])
+  useEffect(() => {
+    if (utils.isAddress(tokenAddress) && getAddress(tokenAddress) !== tokenAddress)
+      setValue('tokenAddress', getAddress(tokenAddress))
+  }, [setValue, tokenAddress])
   const token = useToken(tokenAddress)
   useEffect(() => {
     if (token) {
@@ -51,7 +57,7 @@ export const AddToken: React.FC = () => {
       setValue('tokenSymbol', token.symbol)
       setValue('tokenDecimals', token.decimals)
     }
-  })
+  }, [setValue, token])
   // @ts-ignore
   const submit = trpc.token.add.useMutation()
 
