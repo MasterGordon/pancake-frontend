@@ -5,8 +5,6 @@ import { useBridge } from '../BridgeProvider'
 import makeHandleCheckSupplies from '../contracts/makeHandleCheckSupplies'
 import { useTranslation } from '@pancakeswap/localization'
 
-const { t } = useTranslation()
-
 interface FormErrors {
   currency?: string
   recipient?: string
@@ -30,26 +28,26 @@ type Checks =
   | 'recipientProvided'
   | 'recipientValid'
 
-const checkToMessage: Record<
-  Checks,
-  {
-    message: string
-    field: keyof FormErrors
-  }
-> = {
-  tokenSelected: { message: t('Please select a token'), field: 'currency' },
-  amountValid: { message: t('Please enter a valid amount'), field: 'currency' },
-  max: { message: t('Insufficient funds'), field: 'currency' },
-  fee: { message: t('Amount below min fee'), field: 'currency' },
-  bridgeSupplies: { message: t('Not enough tokens on the destination chain. Please contact support'), field: 'currency' },
-  min: { message: t('Amount must be greater than 0'), field: 'currency' },
-  tokenProvided: { message: t('Please select a token'), field: 'currency' },
-  recipientProvided: { message: t('Please enter a recipient address'), field: 'recipient' },
-  recipientValid: { message: t('Recipient is not a valid address'), field: 'recipient' },
-}
-
 export const useFormErrors = (bridgeFee?: number, bridgeFeeToken?: string) => {
   const { currency, depositAmount, recipient, homeChainConfig, destinationChainConfig, tokenBalances } = useBridge()
+  const { t } = useTranslation()
+  const checkToMessage: Record<
+    Checks,
+    {
+      message: string
+      field: keyof FormErrors
+    }
+  > = {
+    tokenSelected: { message: t('Please select a token'), field: 'currency' },
+    amountValid: { message: t('Please enter a valid amount'), field: 'currency' },
+    max: { message: t('Insufficient funds'), field: 'currency' },
+    fee: { message: t('Amount below min fee'), field: 'currency' },
+    bridgeSupplies: { message: t('Not enough tokens on the destination chain. Please contact support'), field: 'currency' },
+    min: { message: t('Amount must be greater than 0'), field: 'currency' },
+    tokenProvided: { message: t('Please select a token'), field: 'currency' },
+    recipientProvided: { message: t('Please enter a recipient address'), field: 'recipient' },
+    recipientValid: { message: t('Recipient is not a valid address'), field: 'recipient' },
+  }
   const tokenAddress =
     currency instanceof ERC20Token
       ? currency.address
